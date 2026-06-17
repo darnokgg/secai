@@ -1,0 +1,19 @@
+# Windows system files
+desktop.ini
+Thumbs.db
+
+# Backup files
+*.bak
+*.bak.*
+
+# Dependency directories
+node_modules/
+
+# IDE and Editor configurations
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp

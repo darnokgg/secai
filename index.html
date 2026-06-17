@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🛡️🤖 SecAI+ Prep Portal</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+  
+  <!-- Modern Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- CSS Styles -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Background Glows -->
+  <div class="glow-bg glow-1"></div>
+  <div class="glow-bg glow-2"></div>
+  <div class="glow-bg glow-3"></div>
+
+  <!-- App Container -->
+  <div class="app-container">
+    
+    <!-- Top Navigation Bar -->
+    <header class="app-header">
+      <div class="logo-area">
+        <span class="shield-icon">🛡️</span>
+        <div class="title-meta">
+          <h1>SecAI+ <span class="badge">CY0-001</span></h1>
+          <p>Security AI Training & Practice Portal</p>
+        </div>
+      </div>
+      
+      <nav class="nav-tabs">
+        <button class="nav-btn active" data-tab="home">
+          <span class="icon">🏠</span> Home
+        </button>
+        <button class="nav-btn" data-tab="quiz">
+          <span class="icon">📝</span> Practice Quiz
+        </button>
+        <button class="nav-btn" data-tab="vocab">
+          <span class="icon">🧩</span> Vocab Matcher
+        </button>
+        <button class="nav-btn" data-tab="flashcards">
+          <span class="icon">🎴</span> Flashcards
+        </button>
+        <button class="nav-btn" data-tab="glossary">
+          <span class="icon">📖</span> Glossary
+        </button>
+        <button class="nav-btn" data-tab="progress">
+          <span class="icon">📊</span> Progress
+        </button>
+        <button class="nav-btn" data-tab="owasp">
+          <span class="icon">🔥</span> OWASP AI Top 10
+        </button>
+        <button class="nav-btn" data-tab="tutor">
+          <span class="icon">🤖</span> AI Tutor
+        </button>
+      </nav>
+
+      <div class="header-profile-section">
+        <span id="active-profile-display">👤 Active: Default User</span>
+        <button id="profile-modal-trigger-btn" class="btn btn-secondary btn-sm">Switch/Create Profile</button>
+      </div>
+    </header>
+
+    <!-- Main Content Box -->
+    <main class="main-card">
+      <!-- Welcome/Home Tab -->
+      <div id="tab-home" class="tab-content active">
+        <div class="welcome-header">
+          <h2>Welcome to the SecAI+ Study Portal 🛡️🤖</h2>
+          <p>Your interactive training companion for the CompTIA SecAI+ (CY0-001) certification exam.</p>
+        </div>
+
+        <div class="welcome-body">
+          <div class="welcome-grid">
+            <div class="welcome-card card-concept">
+              <span class="card-icon">🧠</span>
+              <h3>Domain 1: Basic AI Concepts</h3>
+              <p>Fundamentals of machine learning (ML), deep learning, transformers, and data lifecycles.</p>
+            </div>
+            <div class="welcome-card card-securing">
+              <span class="card-icon">🎯</span>
+              <h3>Domain 2: Securing AI Systems</h3>
+              <p>Threat modeling, model guardrails, access controls, and defending against AI-specific attacks.</p>
+            </div>
+            <div class="welcome-card card-ops">
+              <span class="card-icon">🛡️</span>
+              <h3>Domain 3: AI-Assisted Security</h3>
+              <p>Leveraging AI for anomaly detection, incident response, and threat logging.</p>
+            </div>
+            <div class="welcome-card card-grc">
+              <span class="card-icon">📋</span>
+              <h3>Domain 4: Governance & GRC</h3>
+              <p>Compliance, NIST AI RMF, bias mitigation, responsible AI, and auditing.</p>
+            </div>
+          </div>
+
+          <div class="features-list-card">
+            <h3>🚀 Portal Features & Interactive Tabs</h3>
+            <div class="features-grid">
+              <div class="feature-item"><strong>📝 Practice Quiz:</strong> Configure question counts (10, 20, 30, etc.) by module, toggle domain-weighted simulation mode, flag difficult questions for later review, or peek at the answers when stuck.</div>
+              <div class="feature-item"><strong>🧩 Vocab Matcher:</strong> Interactive game to test and build your definitions vocabulary.</div>
+              <div class="feature-item"><strong>🎴 Flashcards:</strong> Flip and master vocabulary terms with direct security context.</div>
+              <div class="feature-item"><strong>📖 Glossary:</strong> Direct search and explore all 355 glossary terms grouped by exam domains.</div>
+              <div class="feature-item"><strong>📊 Progress Tracker:</strong> Detailed stats on your study completions and domain mastery rates.</div>
+              <div class="feature-item"><strong>🔥 OWASP AI Top 10:</strong> Interactive modules containing OWASP threats, descriptions, and prompt labs.</div>
+              <div class="feature-item"><strong>🤖 AI Study Tutor:</strong> Chat with an AI companion grounded in the actual syllabus.</div>
+            </div>
+          </div>
+
+          <div class="profile-tip-box">
+            <h4>👤 Create a User Profile to Track Progress</h4>
+            <p>Before you begin your prep, make sure to click the <strong>Switch/Create Profile</strong> button in the top-right corner to load or create your personal user profile. This ensures your customized study logs, vocabulary matcher high scores, and incorrect quiz answers (for Drill Down Mode) are tracked independently under your own name!</p>
+          </div>
+
+          <div class="ai-warning-box">
+            <h4>⚠️ Important Validation & AI Content Notice</h4>
+            <p>While the study content and practice questions are grounded in the actual CompTIA SecAI+ syllabus modules, this practice portal has been compiled, organized, and enhanced using AI technologies. Make sure to verify critical facts, compliance guidelines, and code snippets against standard vendor documentations for real-world enterprise operations.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quiz Tab -->
+      <div id="tab-quiz" class="tab-content">
+        <!-- Quiz Setup / Configurator View -->
+        <div id="quiz-setup-container" class="quiz-setup-card">
+          <h2>📝 Practice Quiz Setup</h2>
+          <p class="setup-subtitle">Configure your custom practice session or start a full exam simulation.</p>
+          
+          <div class="setup-form-group">
+            <label>Select Modules to Include:</label>
+            <div class="module-checkboxes">
+              <label class="checkbox-card">
+                <input type="checkbox" name="setup-modules" value="1" checked>
+                <div class="checkbox-card-content">
+                  <span class="mod-num">M1</span>
+                  <span class="mod-name">AI Concepts</span>
+                </div>
+              </label>
+              <label class="checkbox-card">
+                <input type="checkbox" name="setup-modules" value="2" checked>
+                <div class="checkbox-card-content">
+                  <span class="mod-num">M2</span>
+                  <span class="mod-name">Threat Modeling</span>
+                </div>
+              </label>
+              <label class="checkbox-card">
+                <input type="checkbox" name="setup-modules" value="3" checked>
+                <div class="checkbox-card-content">
+                  <span class="mod-num">M3</span>
+                  <span class="mod-name">Access Controls</span>
+                </div>
+              </label>
+              <label class="checkbox-card">
+                <input type="checkbox" name="setup-modules" value="4" checked>
+                <div class="checkbox-card-content">
+                  <span class="mod-num">M4</span>
+                  <span class="mod-name">AI Life Cycle</span>
+                </div>
+              </label>
+              <label class="checkbox-card">
+                <input type="checkbox" name="setup-modules" value="5" checked>
+                <div class="checkbox-card-content">
+                  <span class="mod-num">M5</span>
+                  <span class="mod-name">AI Operations</span>
+                </div>
+              </label>
+              <label class="checkbox-card">
+                <input type="checkbox" name="setup-modules" value="6" checked>
+                <div class="checkbox-card-content">
+                  <span class="mod-num">M6</span>
+                  <span class="mod-name">Governance & GRC</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="setup-row">
+            <div class="setup-col">
+              <label for="setup-question-count">Number of Questions:</label>
+              <select id="setup-question-count" class="form-select">
+                <option value="10">10 Questions</option>
+                <option value="20" selected>20 Questions</option>
+                <option value="30">30 Questions</option>
+                <option value="50">50 Questions</option>
+                <option value="90">90 Questions (Full Exam)</option>
+                <option value="all">All Available</option>
+              </select>
+            </div>
+            <div class="setup-col">
+              <div class="toggle-container">
+                <label class="switch-label">
+                  <span>⚖️ Weighted Exam Mode</span>
+                  <span class="help-tooltip" title="Selects questions based on official CompTIA SecAI+ domain weights (Securing AI: 40%, AI-Assisted Security: 24%, GRC: 19%, Concepts: 17%).">ℹ️</span>
+                </label>
+                <label class="switch">
+                  <input type="checkbox" id="setup-weighted-mode">
+                  <span class="slider round"></span>
+                </label>
+              </div>
+            </div>
+            <div class="setup-col">
+              <div class="toggle-container">
+                <label class="switch-label">
+                  <span>🤖 Include AI Questions</span>
+                  <span class="help-tooltip" title="Mix in questions from the AI-generated questions pool (if compiled).">ℹ️</span>
+                </label>
+                <label class="switch">
+                  <input type="checkbox" id="setup-ai-questions">
+                  <span class="slider round"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="setup-row">
+            <div class="setup-col">
+              <div class="toggle-container">
+                <label class="switch-label">
+                  <span>📖 Learning Mode</span>
+                  <span class="help-tooltip" title="Toggle ON for immediate feedback and explanations. Toggle OFF for Test Mode (answers and explanations shown at the end).">ℹ️</span>
+                </label>
+                <label class="switch">
+                  <input type="checkbox" id="setup-mode-learning" checked>
+                  <span class="slider round"></span>
+                </label>
+              </div>
+            </div>
+            <div class="setup-col">
+              <div class="toggle-container">
+                <label class="switch-label">
+                  <span>🎯 Drill Down Mode</span>
+                  <span class="help-tooltip" title="Test yourself only on questions you have previously answered incorrectly.">ℹ️</span>
+                </label>
+                <label class="switch">
+                  <input type="checkbox" id="setup-mode-drilldown">
+                  <span class="slider round"></span>
+                </label>
+              </div>
+            </div>
+            <div class="setup-col">
+              <div style="display: flex; align-items: center; height: 100%; padding-top: 10px;">
+                <span id="drilldown-status-text" class="status-subtext" style="color: var(--text-muted); font-size: 0.85rem;">
+                  0 missed questions logged.
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="setup-actions">
+            <button id="start-quiz-btn" class="btn btn-primary btn-lg">🚀 Start Practice Quiz</button>
+          </div>
+        </div>
+
+        <!-- Quiz Active Session View -->
+        <div id="quiz-session-container" class="hidden">
+          <div class="quiz-header">
+            <div class="quiz-progress-bar-container">
+              <div id="quiz-progress-bar" class="quiz-progress-bar" style="width: 0%;"></div>
+            </div>
+            <div class="quiz-meta">
+              <span id="quiz-question-number">Question 1 of 203</span>
+              <span id="quiz-score-indicator">Score: 0/0 (0%)</span>
+            </div>
+          </div>
+
+          <div id="quiz-body" class="quiz-body">
+            <div class="question-box">
+              <span id="question-source" class="source-tag">Source: Module 1</span>
+              <h3 id="question-text">Loading question text...</h3>
+            </div>
+            
+            <div id="options-container" class="options-container">
+              <!-- Options will be injected here -->
+            </div>
+
+            <div id="explanation-box" class="explanation-box hidden">
+              <h4>💡 Explanation</h4>
+              <div id="explanation-text">Explanation here...</div>
+            </div>
+          </div>
+
+          <div class="quiz-footer">
+            <button id="restart-quiz-btn" class="btn btn-secondary">Exit / Setup</button>
+            <div class="quiz-action-buttons">
+              <button id="flag-question-btn" class="btn btn-warning">🚩 Flag Question</button>
+              <button id="check-answer-btn" class="btn btn-info">👁️ Check Answer</button>
+            </div>
+            <button id="next-question-btn" class="btn btn-primary" disabled>Next Question ➡️</button>
+          </div>
+        </div>
+
+        <!-- Quiz Results / Review View -->
+        <div id="quiz-results-container" class="quiz-results-card hidden">
+          <div class="results-header">
+            <div class="results-badge-container">
+              <span class="badge badge-lg">CY0-001</span>
+            </div>
+            <h2>🎉 Practice Quiz Completed</h2>
+            <p id="results-mode-text" style="color: var(--text-muted); margin-bottom: 20px;">Mode: Learning Mode</p>
+            
+            <div class="results-score-row">
+              <div class="results-score-card">
+                <span class="card-label">Correct Answers</span>
+                <span id="results-score-text" class="card-val">0 / 0</span>
+              </div>
+              <div class="results-score-card">
+                <span class="card-label">Score Percentage</span>
+                <span id="results-percent-text" class="card-val">0%</span>
+              </div>
+            </div>
+            
+            <div class="results-feedback-box">
+              <span class="feedback-icon">📊</span>
+              <p id="results-feedback-message">Excellent work! Keep reviewing key concepts to ensure exam mastery.</p>
+            </div>
+          </div>
+          
+          <div class="results-actions">
+            <button id="results-exit-btn" class="btn btn-primary btn-lg">⚙️ Return to Configurator</button>
+          </div>
+
+          <div class="results-review-list">
+            <h3>📝 Detailed Question Review</h3>
+            <div id="results-review-items" class="review-items-container">
+              <!-- Review items injected here -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-vocab" class="tab-content">
+        <!-- Vocabulary Matcher View -->
+        <div class="vocab-header">
+          <div class="vocab-meta">
+            <h3>Vocabulary Matcher</h3>
+            <p>Match the security concept with the correct definition.</p>
+          </div>
+          <span id="vocab-score-indicator" class="score-badge">Score: 0/0</span>
+        </div>
+
+        <div class="vocab-body">
+          <div class="vocab-question-card">
+            <span class="vocab-question-type">WHAT IS THE DEFINITION OF:</span>
+            <h2 id="vocab-term">Term Name</h2>
+          </div>
+
+          <div id="vocab-options" class="vocab-options-grid">
+            <!-- Options injected dynamically -->
+          </div>
+
+          <div id="vocab-feedback" class="vocab-feedback-box hidden">
+            <p id="vocab-feedback-title">Correct!</p>
+            <p id="vocab-feedback-detail">Context detail...</p>
+          </div>
+        </div>
+
+        <div class="vocab-footer">
+          <button id="next-vocab-btn" class="btn btn-primary">Next Term ➡️</button>
+        </div>
+      </div>
+
+      <div id="tab-flashcards" class="tab-content">
+        <!-- Flashcards View -->
+        <div class="flashcards-control">
+          <div class="filter-group">
+            <label for="flashcard-domain-filter">Domain Filter:</label>
+            <select id="flashcard-domain-filter" class="form-select">
+              <option value="all">All Domains</option>
+              <option value="Domain 1">Domain 1: AI Concepts & Cyber</option>
+              <option value="Domain 2">Domain 2: Securing AI Systems</option>
+              <option value="Domain 3">Domain 3: AI for SecOps</option>
+              <option value="Domain 4">Domain 4: GRC & Ethics</option>
+            </select>
+          </div>
+          <div class="card-counter">
+            Card <span id="card-current-index">1</span> of <span id="card-total-count">172</span>
+          </div>
+        </div>
+
+        <div class="flashcard-wrapper">
+          <div class="flashcard" id="flashcard">
+            <div class="flashcard-front">
+              <span class="card-domain">Domain 1</span>
+              <h2 id="card-term">Term</h2>
+              <span class="tap-hint">👆 Click card to flip and view definition</span>
+            </div>
+            <div class="flashcard-back">
+              <span class="card-domain">Domain 1</span>
+              <h3>Definition</h3>
+              <p id="card-definition">Definition goes here...</p>
+              <div class="back-divider"></div>
+              <h4>Security Context & Notes</h4>
+              <p id="card-context">Context goes here...</p>
+              <span class="tap-hint">👆 Click card to flip back</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flashcard-actions">
+          <button id="prev-card-btn" class="btn btn-secondary">⬅️ Previous</button>
+          <button id="master-card-btn" class="btn btn-success">Mark as Mastered</button>
+          <button id="next-card-btn" class="btn btn-primary">Next ➡️</button>
+        </div>
+      </div>
+
+      <div id="tab-glossary" class="tab-content">
+        <!-- Glossary Explorer View -->
+        <div class="glossary-header">
+          <div class="search-bar-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="glossary-search" placeholder="Search terms or definitions...">
+          </div>
+          <div class="filter-pills">
+            <button class="pill-btn active" data-filter="all">All</button>
+            <button class="pill-btn" data-filter="Domain 1">Domain 1</button>
+            <button class="pill-btn" data-filter="Domain 2">Domain 2</button>
+            <button class="pill-btn" data-filter="Domain 3">Domain 3</button>
+            <button class="pill-btn" data-filter="Domain 4">Domain 4</button>
+          </div>
+        </div>
+
+        <div id="glossary-list" class="glossary-list">
+          <!-- Glossary cards injected dynamically -->
+        </div>
+      </div>
+
+      <div id="tab-progress" class="tab-content">
+        <!-- Progress View -->
+        <div class="progress-grid">
+          
+          <div class="stat-card">
+            <h3>Overall Completion</h3>
+            <div class="progress-circle-container">
+              <svg viewBox="0 0 36 36" class="circular-chart">
+                <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path id="progress-circle-fill" class="circle" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <text x="18" y="20.35" class="percentage" id="progress-percentage-text">0%</text>
+              </svg>
+            </div>
+            <p id="overall-completion-meta">0 of 381 items completed</p>
+          </div>
+
+          <div class="stat-breakdown-card">
+            <h3>Domain Coverage</h3>
+            <div class="domain-bars">
+              <div class="domain-bar-group">
+                <div class="bar-label">
+                  <span>Domain 1: AI Concepts & Cyber</span>
+                  <span id="d1-progress-text">0%</span>
+                </div>
+                <div class="bar-bg">
+                  <div id="d1-bar-fill" class="bar-fill fill-d1" style="width: 0%;"></div>
+                </div>
+              </div>
+              <div class="domain-bar-group">
+                <div class="bar-label">
+                  <span>Domain 2: Securing AI Systems</span>
+                  <span id="d2-progress-text">0%</span>
+                </div>
+                <div class="bar-bg">
+                  <div id="d2-bar-fill" class="bar-fill fill-d2" style="width: 0%;"></div>
+                </div>
+              </div>
+              <div class="domain-bar-group">
+                <div class="bar-label">
+                  <span>Domain 3: AI for SecOps</span>
+                  <span id="d3-progress-text">0%</span>
+                </div>
+                <div class="bar-bg">
+                  <div id="d3-bar-fill" class="bar-fill fill-d3" style="width: 0%;"></div>
+                </div>
+              </div>
+              <div class="domain-bar-group">
+                <div class="bar-label">
+                  <span>Domain 4: GRC & Ethics</span>
+                  <span id="d4-progress-text">0%</span>
+                </div>
+                <div class="bar-bg">
+                  <div id="d4-bar-fill" class="bar-fill fill-d4" style="width: 0%;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="achievements-card">
+            <h3>Activity Log</h3>
+            <div class="activity-stats">
+              <div class="activity-row">
+                <span>Quiz Questions Mastered:</span>
+                <strong id="stats-quiz-mastered">0 / 209</strong>
+              </div>
+              <div class="activity-row">
+                <span>Glossary Terms Mastered:</span>
+                <strong id="stats-vocab-mastered">0 / 172</strong>
+              </div>
+              <div class="activity-row">
+                <span>Vocab Matcher Score Rate:</span>
+                <strong id="stats-vocab-accuracy">0%</strong>
+              </div>
+            </div>
+            <div class="progress-actions">
+              <button id="reset-progress-btn" class="btn btn-danger btn-sm">Reset All Study Progress</button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Leaderboard Dashboard -->
+        <div class="leaderboard-section">
+          
+          <!-- Section 1: Global Cloud Leaderboards -->
+          <h2 class="leaderboard-section-title" style="font-size: 1.15rem; color: var(--accent-cyan); margin: 25px 0 10px 0; display: flex; align-items: center; gap: 8px;">
+            <span>🌐</span> Global Leaderboards (Cloud Sync)
+          </h2>
+          <div class="leaderboard-row" style="margin-bottom: 25px;">
+            <!-- Global Study Leaderboard -->
+            <div class="leaderboard-card">
+              <h3>🏆 SecAI+ Global Leaderboard</h3>
+              <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">Combined student progress synced across all study portals.</p>
+              <div class="table-container" style="overflow-x: auto;">
+                <table class="leaderboard-table">
+                  <thead>
+                    <tr>
+                      <th style="width: 60px;">Rank</th>
+                      <th>User Profile</th>
+                      <th>Mastered</th>
+                      <th>Quiz Qs</th>
+                      <th>Avg Accuracy</th>
+                    </tr>
+                  </thead>
+                  <tbody id="global-leaderboard-body">
+                    <tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 20px;">Syncing with cloud...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            
+            <!-- Global Tetris Leaderboard -->
+            <div id="global-tetris-leaderboard-card" class="leaderboard-card tetris-board">
+              <h3>👾 Cyber-Tetris Global High Scores</h3>
+              <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">All-time top arcade scores across all study portals.</p>
+              <div class="table-container" style="overflow-x: auto;">
+                <table class="leaderboard-table tetris-table">
+                  <thead>
+                    <tr>
+                      <th style="width: 60px;">Rank</th>
+                      <th>Player</th>
+                      <th>Score</th>
+                      <th>Lines</th>
+                      <th>Date</th>
+                    </tr>
+                  </thead>
+                  <tbody id="global-tetris-leaderboard-body">
+                    <tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 20px;">Syncing with cloud...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 2: Local Device Leaderboards -->
+          <h2 class="leaderboard-section-title" style="font-size: 1.15rem; color: var(--accent-cyan); margin: 25px 0 10px 0; display: flex; align-items: center; gap: 8px;">
+            <span>💻</span> Local Leaderboards (This Device)
+          </h2>
+          <div class="leaderboard-row">
+            <!-- Study Leaderboard -->
+            <div class="leaderboard-card">
+              <h3>🏆 SecAI+ Local Leaderboard</h3>
+              <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">Ranked by overall course completion percentage and quiz performance.</p>
+              <div class="table-container" style="overflow-x: auto;">
+                <table class="leaderboard-table">
+                  <thead>
+                    <tr>
+                      <th style="width: 60px;">Rank</th>
+                      <th>User Profile</th>
+                      <th>Mastered</th>
+                      <th>Quiz Qs</th>
+                      <th>Avg Accuracy</th>
+                    </tr>
+                  </thead>
+                  <tbody id="leaderboard-body">
+                    <!-- Populated via JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            
+            <!-- Secret Tetris Leaderboard -->
+            <div id="tetris-leaderboard-card" class="leaderboard-card tetris-board hidden">
+              <h3>👾 Cyber-Tetris Local High Scores</h3>
+              <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">Top arcade scores recorded on this portal.</p>
+              <div class="table-container" style="overflow-x: auto;">
+                <table class="leaderboard-table tetris-table">
+                  <thead>
+                    <tr>
+                      <th style="width: 60px;">Rank</th>
+                      <th>Player</th>
+                      <th>Score</th>
+                      <th>Lines</th>
+                      <th>Date</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tetris-leaderboard-body">
+                    <!-- Populated via JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ================================================================
+           OWASP Top 10 for AI Tab
+           ================================================================ -->
+      <div id="tab-owasp" class="tab-content">
+
+        <!-- Sub-Nav Pills -->
+        <div class="owasp-subnav">
+          <button class="owasp-pill active" data-owasp-mode="overview">📋 Overview</button>
+          <button class="owasp-pill" data-owasp-mode="match">🎯 Matching Game</button>
+          <button class="owasp-pill" data-owasp-mode="promptlab">💉 Prompt Lab</button>
+        </div>
+
+        <!-- ---- MODE 1: Overview Cards ---- -->
+        <div id="owasp-overview" class="owasp-mode-panel active">
+          <div class="owasp-intro">
+            <h3>OWASP Top 10 for AI <span class="badge" style="background: linear-gradient(135deg,#ef4444,#f97316); font-size:0.7rem;">EXAM FOCUS 🚨</span></h3>
+            <p>These are the 10 most critical security risks for LLM applications. Click any card to expand the full description.</p>
+          </div>
+          <div id="owasp-cards-grid" class="owasp-cards-grid">
+            <!-- Injected by JS -->
+          </div>
+        </div>
+
+        <!-- ---- MODE 2: Drag-and-Drop Matching Game ---- -->
+        <div id="owasp-match" class="owasp-mode-panel">
+          <div class="owasp-intro">
+            <h3>🎯 Matching Game</h3>
+            <p>Drag each threat name and drop it onto the correct description. Complete all 10 to win!</p>
+          </div>
+          <div class="owasp-match-area">
+            <!-- Left: Draggable Chips -->
+            <div class="owasp-drag-pool" id="owasp-drag-pool">
+              <h4>🏷️ Threat Names</h4>
+              <div id="owasp-chips-container" class="owasp-chips-container">
+                <!-- Chips injected by JS -->
+              </div>
+            </div>
+            <!-- Right: Drop Targets -->
+            <div class="owasp-drop-targets" id="owasp-drop-targets">
+              <h4>📋 Descriptions</h4>
+              <div id="owasp-targets-container" class="owasp-targets-container">
+                <!-- Drop targets injected by JS -->
+              </div>
+            </div>
+          </div>
+          <div class="owasp-match-footer">
+            <div id="owasp-match-score" class="owasp-match-score">Score: <span id="owasp-match-score-val">0</span> / 10</div>
+            <button id="owasp-match-reset" class="btn btn-secondary btn-sm">🔄 Reset Game</button>
+          </div>
+        </div>
+
+        <!-- ---- MODE 3: Prompt Lab ---- -->
+        <div id="owasp-promptlab" class="owasp-mode-panel">
+          <div class="owasp-intro">
+            <h3>💉 Prompt Lab — Identify the Attack</h3>
+            <p>Read each prompt below and identify what type of attack it represents. Build your threat intuition!</p>
+          </div>
+          <div id="owasp-prompt-card" class="owasp-prompt-card">
+            <div class="prompt-card-header">
+              <span class="prompt-number" id="prompt-number">Prompt 1 of 12</span>
+              <span class="prompt-difficulty" id="prompt-difficulty">Medium</span>
+            </div>
+            <div class="prompt-display" id="prompt-text">
+              <!-- Injected by JS -->
+            </div>
+            <div class="prompt-classify-area">
+              <p class="classify-label">What type of attack is this?</p>
+              <div id="prompt-choices" class="prompt-choices">
+                <!-- Choices injected by JS -->
+              </div>
+            </div>
+            <div id="prompt-result" class="prompt-result hidden">
+              <!-- Result injected by JS -->
+            </div>
+          </div>
+          <div class="prompt-lab-footer">
+            <div id="prompt-lab-score" class="owasp-match-score">Score: <span id="prompt-score-val">0</span> / <span id="prompt-score-total">12</span></div>
+            <button id="prompt-next-btn" class="btn btn-primary" disabled>Next Prompt ➡️</button>
+            <button id="prompt-reset-btn" class="btn btn-secondary btn-sm">🔄 Reset</button>
+          </div>
+        </div>
+
+      </div>
+
+      <div id="tab-tutor" class="tab-content">
+        <!-- AI Tutor View -->
+        <div class="tutor-header-bar">
+          <div class="tutor-title">
+            <h3>AI Study Tutor</h3>
+            <p>Ground-trained on your specific Glossary & Exam Questions.</p>
+          </div>
+          
+          <div class="api-key-setup">
+            <select id="tutor-model-select" class="form-select select-sm" style="font-size: 0.8rem; padding: 6px 10px; border-radius: 8px;">
+              <optgroup label="🟣 Google Gemini (Free Tier Available)">
+                <option value="gemini-2.5-flash">Gemini 2.5 Flash</option>
+                <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
+                <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
+              </optgroup>
+              <optgroup label="🟢 OpenAI / ChatGPT (Subscription)">
+                <option value="gpt-4o">GPT-4o</option>
+                <option value="gpt-4o-mini">GPT-4o mini</option>
+                <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+              </optgroup>
+            </select>
+            <input type="password" id="tutor-api-key" placeholder="Paste Gemini or OpenAI API key..." class="form-input">
+            <button id="save-key-btn" class="btn btn-primary btn-sm">Save Key</button>
+            <button id="clear-key-btn" class="btn btn-danger btn-sm hidden">Clear Key</button>
+          </div>
+        </div>
+
+        <div id="tutor-help-card" class="tutor-help-card">
+          <h4>🔑 Connect Your AI — Use Gemini (Free) or ChatGPT (Your Subscription)</h4>
+
+          <div class="help-provider-grid">
+            <!-- Gemini Option -->
+            <div class="help-provider-card">
+              <div class="help-provider-header gemini-header">
+                <span>🟣 Google Gemini</span>
+                <span class="free-badge">FREE TIER</span>
+              </div>
+              <ol>
+                <li>Go to <strong><a href="https://aistudio.google.com/" target="_blank" style="color: var(--accent-cyan); text-decoration: underline;">Google AI Studio</a></strong> and sign in.</li>
+                <li>Click <strong>"Get API key"</strong> → <strong>"Create API key"</strong>.</li>
+                <li>Copy the key — it starts with <code>AIzaSy...</code></li>
+                <li>Select a <strong>Gemini model</strong> above, paste the key, click <strong>Save Key</strong>.</li>
+              </ol>
+            </div>
+            <!-- OpenAI Option -->
+            <div class="help-provider-card">
+              <div class="help-provider-header openai-header">
+                <span>🟢 OpenAI / ChatGPT</span>
+                <span class="sub-badge">SUBSCRIPTION</span>
+              </div>
+              <ol>
+                <li>Go to <strong><a href="https://platform.openai.com/api-keys" target="_blank" style="color: var(--accent-emerald); text-decoration: underline;">platform.openai.com/api-keys</a></strong> and sign in.</li>
+                <li>Click <strong>"Create new secret key"</strong> and copy it.</li>
+                <li>The key starts with <code>sk-...</code></li>
+                <li>Select a <strong>GPT model</strong> above, paste the key, click <strong>Save Key</strong>.</li>
+              </ol>
+            </div>
+          </div>
+
+          <div class="help-note">
+            🔒 <strong>Your key is 100% private and local.</strong> It is stored only in <em>your</em> browser's <code>localStorage</code> — never uploaded to any server. It goes directly from your browser to Google or OpenAI's official API. This app has no backend.
+          </div>
+        </div>
+
+        <div class="tutor-chat-wrapper">
+          <div id="tutor-chat-messages" class="tutor-chat-messages">
+            <div class="chat-msg system-msg">
+              <span class="msg-avatar">🤖</span>
+              <div class="msg-bubble">
+                <p>Hello! I am your AI Study Tutor, fully grounded in your <strong>CompTIA SecAI+</strong> notes. Connect your <strong>Gemini</strong> or <strong>ChatGPT</strong> API key above to start learning together!</p>
+              </div>
+            </div>
+          </div>
+          
+          <div class="tutor-input-area">
+            <textarea id="tutor-chat-input" placeholder="Ask a question about SecAI+, request a quiz on a term, or type a custom prompt..." disabled></textarea>
+            <button id="tutor-send-btn" class="btn btn-primary" disabled>
+              <span>Send</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="app-footer-bar">
+      <p>Prepared for the CompTIA SecAI+ (CY0-001) Certification Exam. Study Notes synced automatically. | <span class="app-version">v1.0.0</span></p>
+      <span id="tetris-egg" title="" aria-hidden="true">🎮</span>
+    </footer>
+  </div>
+
+  <!-- ================================================================
+       Tetris Easter Egg Modal
+       ================================================================ -->
+  <div id="tetris-modal" class="tetris-modal hidden">
+    <div class="tetris-modal-inner">
+      <div class="tetris-header">
+        <div class="tetris-title">
+          <span>🎮</span>
+          <h2>TETRIS</h2>
+          <span class="tetris-secret-badge">SECRET UNLOCKED</span>
+        </div>
+        <button id="tetris-close-btn" class="tetris-close-btn">✕ ESC</button>
+      </div>
+
+      <div class="tetris-layout">
+        <!-- Game Canvas -->
+        <canvas id="tetris-canvas" width="300" height="600"></canvas>
+
+        <!-- Side Panel -->
+        <div class="tetris-side">
+          <div class="tetris-info-card">
+            <div class="tetris-label">NEXT</div>
+            <canvas id="tetris-next-canvas" width="120" height="120"></canvas>
+          </div>
+          <div class="tetris-info-card">
+            <div class="tetris-label">SCORE</div>
+            <div class="tetris-value" id="tetris-score">0</div>
+          </div>
+          <div class="tetris-info-card">
+            <div class="tetris-label">LEVEL</div>
+            <div class="tetris-value" id="tetris-level">1</div>
+          </div>
+          <div class="tetris-info-card">
+            <div class="tetris-label">LINES</div>
+            <div class="tetris-value" id="tetris-lines">0</div>
+          </div>
+          <div class="tetris-info-card tetris-controls-card">
+            <div class="tetris-label">CONTROLS</div>
+            <div class="tetris-controls-list">
+              <span>← →</span><span>Move</span>
+              <span>↑</span><span>Rotate</span>
+              <span>↓</span><span>Soft Drop</span>
+              <span>Space</span><span>Hard Drop</span>
+              <span>P</span><span>Pause</span>
+              <span>ESC</span><span>Exit</span>
+            </div>
+          </div>
+          <button id="tetris-restart-btn" class="btn btn-primary" style="width:100%; margin-top:8px;">New Game</button>
+        </div>
+      </div>
+
+      <div id="tetris-overlay-msg" class="tetris-overlay-msg hidden">
+        <h3 id="tetris-overlay-text">PAUSED</h3>
+        <p id="tetris-overlay-sub"></p>
+        <button class="btn btn-primary" id="tetris-overlay-btn">Resume</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Profile Creation & Switching Modal -->
+  <div id="profile-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>👤 Manage User Profiles</h3>
+        <button id="profile-modal-close-btn" class="modal-close">&times;</button>
+      </div>
+      
+      <div class="modal-body">
+        <div class="form-group" style="margin-bottom: 20px;">
+          <label for="profile-select-dropdown" style="display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.95rem;">Switch Active User:</label>
+          <select id="profile-select-dropdown" class="form-select" style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); color: #fff;">
+            <!-- Populated via JS -->
+          </select>
+          <button id="profile-switch-btn" class="btn btn-secondary" style="width: 100%; margin-top: 12px; padding: 10px;">Switch User 👤</button>
+        </div>
+        
+        <div class="divider-text" style="text-align: center; margin: 15px 0; color: var(--text-muted); font-size: 0.85rem; position: relative;">
+          <span style="background: var(--bg-obsidian); padding: 0 10px; position: relative; z-index: 1;">or</span>
+          <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--border-color); z-index: 0;"></div>
+        </div>
+        
+        <div class="form-group">
+          <label for="profile-create-input" style="display: block; margin-bottom: 8px; font-weight: 500; font-size: 0.95rem;">Create New User Profile:</label>
+          <input type="text" id="profile-create-input" class="form-control" placeholder="Enter username (e.g. John Doe)" style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(0,0,0,0.2); border: 1px solid var(--border-color); color: #fff; box-sizing: border-box;">
+          <button id="profile-create-btn" class="btn btn-primary" style="width: 100%; margin-top: 12px; padding: 10px;">Create Profile 🚀</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS Scripts -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

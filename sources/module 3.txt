@@ -1,0 +1,1327 @@
+Installing Access Controls for AI
+Protecting artificial intelligence (AI) systems starts with strong access controls, so only the right people and applications can interact with your models and data. On top of that, applying solid data security controls—like encryption and data masking—keeps sensitive information safe as it moves through the AI workflow. Ongoing monitoring and regular auditing are just as important, helping you spot unusual activity and respond quickly to any potential threats. By layering these security steps, you can keep your AI systems safe and running smoothly. In this module, you'll understand how to deploy access controls for AI while maintaining data security controls.
+
+In this module, you will:
+Deploy access controls for AI
+Apply data security controls for AI security
+Perform monitoring and auditing for AI systems
+
+Access Control Principles for AI
+An access control system for AI is implemented in a similar manner as for any other resource in an enterprise environment. This ensures that an information system meets the goals of the CIA triad and can be considered secure. Access control principles govern how a subject may interact with other objects. Subjects are people, devices, software processes, or any other system that can request and be granted access to a resource. Objects are the resources. An object could be a specific model, data set, or prompt within the AI system. Subjects are assigned rights or permissions to resources based on a variety of factors.
+
+Modern access control is typically implemented as an identity and access management system (IAM). IAM comprises four main processes:
+
+Identification—creating an account name or identity that uniquely represents the user, device, or process.
+Authentication or authN—proving that a subject is who or what it claims to be when it attempts to access the resource. An authentication factor determines what sort of credential the subject can use. For example, people might be authenticated by providing a password; a computer system could be authenticated using a token such as a digital certificate or software token.
+Authorization or authZ—determining what rights subjects should have on each resource, and enforcing those rights. An authorization model determines how these rights are granted. For example, in a role-based model, permissions are based on your role within the organization. This can vary from limited prompt access for an AI system user to the AI system administrator having full access to all models and data sets.
+Accounting—tracking authorized usage of a resource or use of rights by a subject and alerting when unauthorized use is detected or attempted. This is where logs of access and use can be created for auditing.
+Differences among Identification, Authentication, Authorization, and Accounting
+A diagram shows the difference between the process of identification, authentication, authorization, and accounting.
+Images © 123RF.com.
+
+Description
+The processes are as follows: 1. Identification: The system owner confirms the user's identity and creates an account to represent the user. 2. Authentication: The user authenticates by entering the credential and comparing it to the hashed credential. 3. Authorization: For each action the account performs, a permission list is checked to allow or deny the action. The actions include reading or writing. The list checked is Access Control List (A C L). 4. Accounting: The system tracks permission usage in a log. The user cannot prevent this auditing.
+
+While there are general controls that all information systems can be secured with, there are specific controls that are used to address issues within AI systems specifically. These include enforcing access controls that allow for users, engineers, and the model itself to interact with various data sets. Some of those data sets may include sensitive data such as PII, PHI, and financial records. Careful implementation of controls should restrict access as much as possible in accordance with the principle of least privilege.
+
+AI Access Control Models
+With an AI system's access control system, it may grant or deny access to certain models, data, or tools within the system. This provides the ability to control what users and systems are allowed to do and should be based on the principle of least privilege. This is where a user or system is given the correct level of access to complete their assigned tasks and work; nothing more, nothing less.
+
+Ensuring the right level of access for users, systems, and tools, administrators can reduce potential threats to the AI system itself. Threats may include unauthorized access, exploitation, or abuse of the model through malicious inputs to prompts or APIs, or even denial of service (DoS) attacks that can leave a system useless by authorized accounts.
+
+Providing the right level of access to models, data, agents, and even the APIs and network systems can increase the security of an AI system.
+
+Role-based access controls (RBAC) are implemented based on the role of the user or system within the enterprise. Some users may only need to access certain models or prompts for their job tasks. Other users may need elevated permission based on their supervisory or administrative role.
+
+Attribute-based access controls (ABAC) are implemented based on account or resource attributes, rather than their role within the organization. An example could be seen as an AI researcher should have access to all the data within the system, whereas an external user of the system may only have access to certain data marked as public access. The researcher's account attributes and the data being marked as public and private would facilitate the researcher to view all the data. The external user account having the attribute for only public data access would only be able to mark such data in the system. All the data with the attribute of private would not be accessible.
+
+Within an AI system, distinct permissions should be used to ensure the right level of access to each specific component is granted. For example, who should have rights to use the model to perform tasks versus who should have permissions to retrain the model on a new dataset. Inference is a process by which an AI model is used to generate output such as predictions or answers to questions. The more granular the permissions are, the more control an organization has over the AI system. In many cases, the permissions also need to address data privacy concerns under the various regulatory requirements, such as GDPR, HIPAA, and the Privacy Act of 1974.
+
+Many AI systems today will implement these controls through policy as code. This means that the policy is defined, enforced, and managed using programming code rather than manual procedures to implement them. This allows for centralized control of the permissions and facilitates the organization's ability to make changes, test those changes, and then deploy them once approved. The changes go into effect immediately. This can be accomplished by using tools such as Open Policy Agent (OPA), AWS IAM, AZURE Policy, or a specific machine learning tool like IBM's Watson.
+
+Implementing policy as code benefits the organization by automating the deployment of these permissions across the various environments and endpoints of the AI system. It also leads to auditabilty, where an organization can track the history of the policy through versioning and enhances security by embedding the regulatory compliance throughout the developmental pipeline.
+
+Engineering the API access can benefit from using an API control profile. These profiles are based on policy from the organization. IT specifies who can use an API, what data is allowed to be accessed, and what behaviors can be performed during the interaction with the API. The profiles normally will include the following:
+
+Authentication—Identify verification processes using Open Authorization (OAuth2), API Keys, and JSON Web Tokens
+
+Authorization—Roles and permissions for accessing endpoints and data
+
+Throttling—Prevent abuse through limits on the number of requests per user or system
+
+Input and Output Validation - Verification of data being processed in and out of the API
+
+Audit Logging—Records all calls being made to the API to ensure governance compliance and traceability
+
+Content Filtering—Limitations to block unsafe or illegal content from the API
+
+Context-aware Controls—Adjustment of permissions based on external factors such as time or location
+
+By implementing these profiles, organizations ensure that only authorized users can access the API, models, and data that they are allowed to, sensitive data sets are protected at a granular level, and all inputs and outputs are validated and logged to ensure compliance with governing regulations.
+
+Threat Landscape of AI Systems
+All information systems, including AI, are affected by threats. These threats could be internal threats from a disgruntled employee, for example, or from an external threat actor who does not agree with the organization's mission and causes a denial of service (DoS) attack to make the AI engine unavailable.
+
+Some threats are naturally occurring, such as weather affecting the power or internet access to the organization's systems; others may be man-made, such as a user creating misleading inputs that cause the AI system or model to provide inaccurate or harmful outputs.
+
+Another threat is through the manipulation or poisoning of the data the AI system is trained on. This could be using incorrect or purposefully wrong data to train the model. This will cause the outputs to not be realistic or correct. Another similar attack could be where the data is manipulated in such a way to skew the bias toward one opinion or interpretation of the data.
+
+Identification of threats can be a difficult process; however, it can assist in identifying the proper controls that should be implemented to protect the system from those threats. A risk and threat assessment process should be identified and completed by the organization before the system is placed online for active use.
+
+The National Institute of Standards and Technology (NIST) published their AI Risk Management Framework (RMF) in 2023, after developing it through a collaborative process with the international community. The ISO/IEC 27001:2022, 42001:2023, and 23894:2023 are international standards for information system management, the establishment and maintenance of AI Management Systems, and guidance on AI Risk Management, respectively.
+
+The OWASP Top 10 for Large Language Model (LLM) Applications lists prompt injection, disclosure of sensitive information, data and model poisoning, and misinformation among its top security concerns for AI systems.
+
+Prompt injection attacks use malformed input requests to the system in order to manipulate and cause the system to not perform as intended. Sensitive data that is stored by the system could potentially be accessed by a malformed prompt that allows access to the protected data. This might be seen in an situation where a user can input a prompt that request information about a password policy. The system responds with details of the organizations password policy and its requirements. A subsequent prompt from the user asks which passwords are protected and should not be revealed. The AI system then replies that the developer account dev01 is a protected account. This response concerning a specific account name would be seen as an unintentional data leakage because the system should not be revealing specific user data to a regular user of the system. The series of questioning causes the system to violate or deviate from its normal behavior of protected the sensitive data such as specific user account names.
+
+Model Access
+AI model access references the ability to interact, use, or control the AI model itself. User access specifically refers to a user's ability to interact with the model through an API or direct access to a software program that allows access. When it comes to a developer or system administrator, the model access would be to a deeper level and would facilitate the ability to make changes to the model, such as modification of parameters and training the model on a specific data set.
+
+Model access can be controlled using various authentication mechanisms and authorizations being set for each type of user and integration, such as an API. We may also look at controlling the level of access by restricting the number of requests a user can make to the model. This would require logging of each request and auditing the use of the model on a regular basis to ensure compliance with the established rules and/or controls.
+
+Data and Agent Access
+Data access looks at controlling which data a user or entity within the AI system has access to. This can be based on the user role within the organization and what types of data they should have access to. For example, if an employee works in the human resources department, they may need to have access to all the restricted personnel data about the organization. Another individual from finance, for example, may only need access to an employee timecard and pay rate to calculate the total pay.
+
+Agents are defined as an active system that is able to perceive, reason, decide, and act based on user requests. Tools in an AI system are used to achieve goals and are considered passive, and are used to perform very specific tasks when instructed to do so by the agent.
+
+This control of access to the data can also be used to control how certain APIs and agents within the AI system can interact with certain portions of the data set. An agent may be an autonomous or semi-autonomous component within the AI system. For example, a public network-facing agent may only have access to prompts and data marked as public within the model. An internal system administrator account, however, may have the ability to access the same agent from the internal private network and then might be granted access to both public and private marked prompts and data sets. The level of access to certain data sets may restrict or enhance the output of the AI model due to the varying amount of data used in the decision-making and interpretation process by the AI system. The more data that can be accessed will provide better output from the system.
+
+Certain types of data may require special handling in an AI system. Certain regulatory bodies will require granular access controls to be fully documented and audited on a regular basis. Data that may require this type of handling includes personally identifiable information (PII) andpersonal health information (PHI). This is because each of these data sets is regulated under GDPR and HIPAA compliance programs. In some businesses, the data and model itself may be governed by regulatory bodies to include certain types of access controls like two- or more-factor authentication and data protections such as encryption. These controls must also be documented and audited on a regulatory basis. There may be external reporting requirements as well.
+
+It is also recommended that organizations add additional controls to agents and tools within the AI system, as they are considered privileged execution surfaces. Controls may include:
+
+Explicit allow lists and permissions for agent access to tools: granular protections and controls
+
+Network access control list: allows communications to and from the network of systems
+
+Time expiration for secrets used by tools: limits abuse and access by the agent or tool
+
+Logging of input, output, and usage: facilitates analysis of use and monitoring
+
+Data anonymization: protects data privacy and ensures regulatory compliance
+
+Human in the Loop: allows humans to interview and approve or override decisions
+
+Network and API Access
+Network and API access controls are similar to previously mentioned concepts of role and attribute-based designs. The unique part of AI systems today is that they rely on both internal and external networks to function. The AI system may be linked, for example, to several cloud resources or IoT devices across the globe. These same systems will utilize an application programming interface (API) to communicate with other systems for translation of languages, visual context and identification, and even location services. These function integrations help to add more data for the AI system to base its output on.
+
+Since this data between devices and APIs may traverse insecure networks, access controls may need to be increased for additional levels of authentication of not only the user of the system, but also the devices communicating. Controls for authentication of the networked systems include the forced use of HTTPS-based communication, specialized one-time use tokens, and validation of inputs to the AI system before execution. These can help mitigate certain security concerns, such as eavesdropping and injection attacks that can plague network and API access for AI systems.
+
+Full access to an API is not always required. Strict access controls should be used to minimize the depth of access an entity has to the environment. The least privilege principle should also be considered when granting and modifying access to the API. This can be accomplished by using firewalls to control access via the network, along with API-specific permission settings. Multifactor authentication implementations should also be used to ensure that authentication is a controlled process. From simple username and passwords to advanced certificate and token-based authentication, ensuring the right entity is accessing the API is critical. The authorization process would then ensure the correct permissions or level of access to the API is granted.
+
+Question 1
+
+Flag for Review
+
+Check Answer
+Which of the following is a recommended security control for authenticating devices and users accessing AI system APIs?
+
+answer
+
+Implementing multi-factor authentication methods such as certificates or one-time tokens, while also requiring strong user and device identity verification for API access.
+
+
+Implementing basic username and password authentication, while encrypting the credentials in transit, but not enforcing password complexity requirements.
+
+
+Allowing limited API access based on IP address whitelisting, but not requiring additional user authentication mechanisms.
+
+
+Relying on secure VPN tunnels for API communication, but foregoing application-layer authentication and input validation controls.
+
+Question 2
+
+Flag for Review
+
+Check Answer
+Which of the following BEST describes a threat unique to AI systems that can directly manipulate the outputs by corrupting the training data?
+
+answer
+
+Data Poisoning
+
+Correct Answer:
+Correct
+
+Hardware Failure
+
+
+User Authentication Failure
+
+
+Distributed Denial of Service (DDoS)
+
+Explanation
+Data poisoning is the correct answer. Data poisoning is a unique and significant threat for AI systems. It involves corrupting or manipulating the data used to train the AI model. When attackers introduce incorrect or biased data into the training set, they can influence the AI's outputs, causing it to make inaccurate or harmful decisions. This specifically targets the way AI models learn and generate outputs, making it a critical risk in AI environments.​
+
+​Distributed Denial of Service (DDoS) is incorrect. While a DDoS attack (making the AI system unavailable by overwhelming it with traffic) is a general cybersecurity threat, it is not unique to AI systems and does not involve manipulating the outputs by corrupting the training data. It instead targets system availability rather than the accuracy or integrity of AI model outputs.​
+
+​Hardware failure is incorrect. Hardware failure is a naturally occurring risk, such as a server malfunctioning due to component issues or environmental factors (e.g., power loss, overheating). While it can affect the AI system's availability, it is not an attack—nor is it related to corrupting the training data or manipulating output results.​
+
+​User authentication failure is incorrect. User authentication failure occurs when the system cannot correctly verify a user's identity, risking unauthorized access. While this is a security concern, it does not describe a threat that manipulates AI outputs via the training data, as data poisoning does.
+
+Question 3
+
+Flag for Review
+
+Check Answer
+Which of the following practices are recommended for securing privileged execution surfaces such as agents and tools, within an AI system? (Select three.)
+
+answer
+
+Permitting agents to access data without any anonymization.
+
+
+Setting time expirations for authentication secrets used by tools.
+
+Correct Answer:
+Correct
+
+Maintaining detailed logging of all agent activity.
+
+Correct Answer:
+Correct
+
+Disabling access controls for agents during routine operations to improve performance.
+
+Incorrect answer:
+Incorrect
+
+Allowing only pre-approved agents access to specific tools through allow lists.
+
+Correct Answer:
+Correct
+
+Ignoring regulatory requirements regarding data access.
+
+
+Granting all agents administrative rights to all tools for flexibility.
+
+Explanation
+Setting time expirations for authentication secrets used by tools is correct. Limiting secret duration helps prevent unauthorized or prolonged access if credentials are exposed.
+
+Maintaining detailed logging of all agent activity is correct. Logging is vital for monitoring privileged actions, auditing, anomaly detection, and regulatory compliance.
+
+Allowing access through pre-approved agent allow lists is correct. Allow lists restrict which agents can use specific tools, reducing risk and exposure.
+
+Granting all agents administrative rights to all tools is incorrect. This violates the principle of least privilege and increases system risk.
+
+Ignoring regulatory requirements is incorrect. Compliance with data access regulations is essential, especially for sensitive information.
+
+Permitting data access without anonymization is incorrect. Anonymization protects privacy and is required for compliance.
+
+Disabling access controls for performance is incorrect. Strong, consistent controls must always be enforced for security.
+
+Question 4
+
+Flag for Review
+
+Check Answer
+A financial services company is building an AI-powered chatbot to assist customers with account inquiries. This chatbot accesses various data types, including public interest rates, customer transaction histories, and social security numbers.
+
+As the systems administrator, you must implement controls that address special handling requirements for sensitive data within the AI system, ensuring compliance with all applicable regulations.
+
+Which of the following approaches BEST addresses the special handling of sensitive data such as personally identifiable information (PII) and ensures regulatory compliance within the AI system?
+
+answer
+
+Configure the chatbot to access customer data through an encrypted API endpoint, with all access attempts monitored and alerts generated for suspicious activities. Customers are shown clear data handling notices before interacting with the chatbot.
+
+Incorrect answer:
+Incorrect
+
+Anonymize sensitive PII within the dataset before use, enforce access restrictions for agents interacting with this data, and schedule regular audits to verify compliance with data protection regulations like GDPR and HIPAA.
+
+Correct Answer:
+Correct
+
+Encrypt only the database files that store sensitive data, restrict network access to a single firewall, and implement an internal policy stating that employees must not misuse sensitive information, without configuring access controls at the application or agent level.
+
+
+Allow agents to access sensitive data only after successful multifactor authentication, maintain a detailed activity log for each access session, and require all agents to complete certified privacy training annually.
+
+Explanation
+Anonymizing sensitive PII in the dataset, enforcing access restrictions for agents, and scheduling regular audits for GDPR/HIPAA compliance is correct. These measures protect privacy, ensure only authorized agents interact with data, and maintain ongoing compliance, matching best practices.
+
+Allowing access only after multifactor authentication, maintaining detailed logs, and requiring annual privacy training is incorrect. While helpful, these steps lack the crucial enforcement of least privilege and role-based access controls. Technical restrictions are essential for compliance beyond just authentication and monitoring.
+
+Encrypting only the database, restricting network access to one firewall, and relying on internal misuse policies is incorrect. These steps lack application-level access controls. Encryption alone can't prevent inappropriate access after decryption, and policies must be technically enforced.
+
+Allowing chatbot access solely via encrypted API with monitoring is incorrect. Without field-level controls, sensitive data could be overexposed, violating privacy requirements.
+
+Question 5
+
+Flag for Review
+
+Check Answer
+What is the primary purpose of the identification process in Identity and Access Management (IAM) for AI systems?
+
+answer
+
+To create an account or identity that uniquely represents the user, device, or process.
+
+Correct Answer:
+Correct
+
+To determine what actions a user is allowed to perform on specific resources.
+
+
+To track and log user activity for later review and auditing.
+
+
+To prove the credentials of a user before accessing a resource.
+
+Explanation
+To create an account or identity that uniquely represents the user, device, or process is the correct answer. Identification is the process of establishing a unique identity for each user, device, or process.
+
+To determine what actions a user is allowed to perform on specific resources is incorrect. This describes authorization, which decides user permissions for resources.
+
+To prove the credentials of a user before accessing a resource is incorrect. This is the role of authentication, which involves validating a subject's credentials.
+
+To track and log user activity for later review and auditing is incorrect. This describes accounting, not identification. Accounting involves logging and monitoring access.
+
+Question 6
+
+Flag for Review
+
+Check Answer
+In access control systems for AI, what is assigned to subjects in order to manage how they interact with resources?
+
+answer
+
+Data sets
+
+Incorrect answer:
+Incorrect
+
+Subject rights
+
+Correct Answer:
+Correct
+
+Logging configurations
+
+
+Physical tokens
+
+Explanation
+Subject rights is the correct answer. Access control principles involve assigning rights or permissions to subjects (such as users, devices, or processes) to determine and control their interactions with various resources.
+
+Data sets is incorrect. Data sets are objects or resources that the subjects may access, not what is assigned to the subjects themselves.
+
+Logging confirmations is incorrect. Logging configurations define how activities are recorded for monitoring or auditing but are not the means by which access is determined or assigned to a subject.
+
+Physical tokens is incorrect. Physical tokens can be used as authentication factors but do not define or control how a subject interacts with resources in terms of permissions; these are mechanisms for proving identity, not rights assignment.
+
+Question 7
+
+Flag for Review
+
+Check Answer
+Maria is an AI engineer in her organization. She has been asked to configure access controls for a new machine learning model that handles sensitive customer information.
+
+The organization wants to ensure that only authorized personnel can update or retrain the model, while data analysts should only be able to use the model to generate predictions.
+
+How should Maria configure model access according to best practices?
+
+answer
+
+Configure all model access through a single shared admin account to simplify permission management and reduce overhead.
+
+
+Grant data analysts "training and modification" permissions and restrict AI engineers to "prediction/inference" operations to separate roles and avoid errors.
+
+Incorrect answer:
+Incorrect
+
+Assign "training and modification" permissions exclusively to AI engineers like Maria, while granting "prediction/inference" permissions to data analysts. Log and review all model interactions regularly.
+
+Correct Answer:
+Correct
+
+Allow all team members, including data analysts and external contractors, full access to both modify and use the model to encourage faster iterative development and problem solving.
+
+Explanation
+Assigning "training and modification" permissions to AI engineers and "prediction/inference" to data analysts, with regular logging, is correct. This enforces least privilege, ensuring users have only necessary access. Engineers maintain the model, while analysts use it for inference. Logging supports auditing and catches unauthorized activity.
+
+Allowing all team members, including contractors, full access is incorrect. This ignores security best practices and exposes sensitive data and the model to risks like unauthorized changes or leaks. Only qualified personnel should have modification privileges.
+
+Using a single shared admin account is incorrect, as it removes accountability and increases risk. Individual accounts and granular permissions are necessary for security.
+
+Letting data analysts modify or train the model is incorrect. Only engineers should have such access, maintaining model integrity and security.
+
+Question 8
+
+Flag for Review
+
+Check Answer
+An enterprise organization is deploying a machine learning service in a multi-cloud environment. The security team wants to guarantee consistent, auditable enforcement of access controls across development, testing, and production environments.
+
+They decide to implement "policy as code" to manage who can access data sets, retrain models, and use APIs. However, shortly after deployment, they notice that changes to access policy are taking longer to propagate to all environments, and some permissions are not updated as intended.
+
+What is the BEST way for the security team to address this and ensure their policy as code solution works?
+
+answer
+
+Automate the testing and deployment of policy as code so that any policy updates are validated, version-controlled, and rolled out to all target environments simultaneously.
+
+Correct Answer:
+Correct
+
+Assign a dedicated administrator to manually apply access changes in each environment after reviewing the policy scripts, to ensure no errors occur during the update process.
+
+
+Restrict all policy updates to only production environment first; after several weeks, apply successful changes to development and testing environments.
+
+
+Temporarily disable policy as code, revert to manual access control updates, and document every change in spreadsheets to avoid confusion during the transition.
+
+Explanation
+Automating the testing and deployment of policy as code so updates are validated, versioned, and rolled out to all environments simultaneously is correct. This leverages automation, version control, and consistency, ensuring policies are accurate, auditable, and compliant across all environments.
+
+Assigning an administrator to manually apply changes is incorrect. Manual updates defeat policy as code's purpose, are inefficient, error-prone, hard to audit, and do not scale or ensure consistency.
+
+Restricting updates to production first, then applying them elsewhere, is incorrect. This causes environment misalignment, risks untested changes in production, and undermines the synchronization purpose of policy as code.
+
+Disabling policy as code and reverting to manual updates documented in spreadsheets is incorrect. This increases errors, loses audit trails, reduces agility, and weakens security and compliance.
+
+Question 9
+
+Flag for Review
+
+Check Answer
+Given an AI system that handles both public and sensitive personal data while connecting to external cloud services via APIs, which of the following approaches BEST demonstrates an effective evaluation of security controls for network and API access?
+
+answer
+
+Reviewing the effectiveness of firewalls, multi-factor authentication, and enforcing role-based access, then recommending adjustments based on current compliance requirements and threat assessments.
+
+Correct Answer:
+Correct
+
+Limiting the use of HTTPS protocols to internal communication and relying on standard HTTP for external network communication for ease of troubleshooting, while ensuring user credentials are checked during login.
+
+
+Focusing solely on API throttling policies to prevent denial of service attacks, assuming this effectively mitigates all types of network threats.
+
+
+Applying the same access controls to all APIs regardless of the type of data they handle or the level of sensitivity involved, to maintain consistency and reduce administrative overhead.
+
+Explanation
+Reviewing firewalls, multi-factor authentication, and role-based access controls, then recommending adjustments based on compliance and threat assessments, is correct. This approach evaluates and enhances both technical and procedural security controls, ensuring strategies are current and comprehensive.
+
+Focusing only on API throttling for DoS attacks is incorrect. While helpful, throttling does not address authentication, encryption, or other threats. Effective evaluations must cover a range of controls.
+
+Applying the same access controls to all APIs is incorrect. Uniform controls overlook data sensitivity and risk; security should be tailored based on context and least privilege.
+
+Limiting HTTPS to internal communication and using HTTP externally is incorrect. This exposes data to interception. HTTPS and secure authentication are necessary for all communications, including external networks.
+
+Question 10
+
+Flag for Review
+
+Check Answer
+A financial services company has deployed an AI-powered analytics platform. To meet regulatory requirements and mitigate the risk of unauthorized access, the IT team enforces granular permissions for users interacting with the platform. Each user's permissions are assigned based on their job functions, with options to read data, export reports, retrain models, or modify access controls.
+
+Recently, during an audit, it was discovered that several users with "analyst" roles can retrain the model and export datasets when they should only be able to generate and read reports. Conversely, some researchers cannot access model retraining features, even though it is critical to their job.
+
+How should the IT team apply granular permissions to resolve these access issues and support both security and functionality?
+
+answer
+
+Consolidate all permissions under a single "power user" role and request all users to share this account for complex tasks to avoid configuration complexity.
+
+Incorrect answer:
+Incorrect
+
+Review and update user role definitions and associated permissions to ensure each user gets only the minimum necessary rights for their responsibilities, while enabling these functions for researchers.
+
+Correct Answer:
+Correct
+
+Shift all user roles to the highest existing access level temporarily to avoid workflow interruptions, then slowly reduce permissions on a case-by-case basis as needed.
+
+
+Remove all permission restrictions except for senior management, allowing most users unrestricted platform access to encourage collaboration and innovation.
+
+Explanation
+Reviewing and updating user role definitions and permissions to ensure users get only the minimum rights needed for their jobs, while enabling key researcher functions, is correct. This enforces least privilege, tailors access to job roles, supports security and compliance, and resolves audit findings efficiently.
+
+Shifting all users to the highest access level temporarily, then reducing access later, is incorrect. This exposes systems and data to security risks and noncompliance, even if only short-term, undermining the least privilege principle.
+
+Consolidating permissions under a shared "power user" account is incorrect. Shared accounts remove accountability, prevent auditing, and create serious compliance and security risks.
+
+Removing all restrictions except for senior management is incorrect. This invites data leaks, noncompliance, and regulatory violations, even if meant to encourage collaboration.
+
+Apply Data Security Controls for AI Security
+Exam Objectives
+1.2 Explain the importance of data security in relation to AI.
+2.4 Given a scenario, implement data security controls for AI systems.
+2.5 Given a scenario, implement monitoring and auditing for AI systems.
+Keeping AI data secure is a top priority in any organization working with intelligent systems. To safeguard sensitive information, data security controls like strong authentication and access restrictions are essential. Encrypting AI data—both while it's stored and as it moves across networks—is a key step in protecting it from leaks or unauthorized access. Alongside these measures, adopting solid data safety practices helps ensure your AI remains trustworthy and your organization's valuable information stays protected.
+
+Overview of AI Data Security Controls
+Positive control and monitoring of data collected, used, and created by an AI system may require special protection mechanisms such as encryption, data masking, and classification to ensure regulatory compliance laws and regulations are being met.
+
+There is also a risk to data through improper storage and handling of data. Some data requires special handling and processing practices to be implemented. This is usually established by various regulatory compliance programs. To aid in understanding what data protections need to be in place, the organization may want to establish a data classification process and procedure. This may include using labels and clearances that directly identify the data or role-based access controls.
+
+Some examples of data compliance and regulatory programs include the General Data Protection Regulation (GDPR) of the European Union, the Health Insurance Portability and Privacy Act (HIPPA) of the United States, or the Payment Card Industry Data Security Standard (PCI-DSS). Governmental agencies may use labels such as "confidential", "secret", and "top secret" to classify their data based on national security importance.
+
+Controls are used to prevent an incident or issue from occurring. From accidental exposure of confidential data, such as PII and PHI, that can stem from wrong permissions, or through malicious data leaks to system errors.
+
+Encryption of AI Data
+Data encryption can be used to ensure data confidentiality and integrity by making data unreadable unless the system or user has access to the decryption keys for the data.
+
+Data that is stored within the system and not being utilized or accessed is said to be at rest. It can be protected by file, folder, or even storage-drive-level encryption tools. The encryption keys can be securely stored in a key management system/service (KMS), through a trusted platform module (TPM), or even a hardware security module (HSM). Amazon Web Services has its KMS service, and Azure has their Key Vault service that can be integrated into cloud-deployed AI systems. This allows the secure storage and control of access to the encryption keys based on several access control policies.
+
+Data in transit from one location to another can also be protected through encryption algorithms, such as Transport Layer Security (TLS) or the use of a virtual private network (VPN). Secure communication protocols like SFTP, FTPS, and HTTPS can also be used to provide security of data while in transit from storage to the AI model and system or from user input over a network. The use of TLS version 1.3 and newer is recommended. Consideration of HTTP-3 with Quick UDP Internet Connections (QUIC) should also be considered as it will speed up communication through the use of UDP vice TCP, while also protecting the data in transit with the native inclusion of TLS 1.3.
+
+Data in use can be very difficult to protect because traditional CPUs could not process data that was encrypted.
+
+Flash forward to today's modern solutions that include trusted execution environments (TEE), which include hardware that isolates sensitive data and can ensure the secure processing of data. Some cloud service providers have services known as secure enclaves that are used to provide isolated data processing hardware.
+
+Another implementation is known as homomorphic encryption (HE). This method of encryption allows secure processing of data while it remains encrypted. This prevents disclosure of data in its most vulnerable state, data in use.
+
+Differentially private stochastic gradient descent (DP-SGD) is one method that is used for machine learning data encryption to protect the data privacy of the data endpoints. This process works by calculating a gradient of the training data being used to train the model. This gradient is clipped, or limited, to ensure a single data point in the data set is not being used to dominate the training process. This is then further enhanced by adding a random amount of noise to the data set gradient to limit the ability of a malicious attacker to determine is a particular data point was or was not used during the training.
+
+This is particularly useful to enhance privacy, but comes with a trade-off in that more noise or random data added can reduce the performance and accuracy of the model. More noise, less accuracy, but more data privacy.
+
+Data Safety Measures
+Risk is defined as the potential threat and vulnerabilities to an information system or its components that would affect the confidentiality, integrity, and availability of those systems and components. AI systems are not immune to having risks associated with how they access, utilize, and store data. These risks can cause serious implications for the organization responsible for the management and operation of an AI system.
+
+A data breach occurs when data is accessed or exposed to unauthorized users of the system. This exposure could result from failing to implement controls such as encryption of the data during storage or transfer. This risk can originate from within the organization due to an employee not having the correct level of access to the system, or it can originate externally from an unauthorized user or even a malicious threat actor.
+
+Model bias and the quality of data input for the system is also a risk associated with operating an AI system. Biased or incorrect data for training the model or system, or incorrect data inputs being provided by users of the system, can cause incorrect output. This can lead to unfairness or incorrect business decisions that are based on this skewed output. The old technology phrase of "garbage in, garbage out" accurately describes this conundrum.
+
+Data masking is where real information and data are replaced with fictional information. For example, replacing customer names with made-up names to prevent direct mapping back to the individual. This can be used when the actual data content is not important or is being used in non-production processes.
+
+Data masking can be implemented using static, or permanent masking that creates a separate dataset with the masking values being used. Dynamic masking, however, masks the data as it is being accessed or used, and then returns the data to its normal value once it is at rest again. The dynamic approach, data anonymization, refers to a practice of removing identifying details within the dataset. This may include the masking of the data or its total removal. An example would be to remove customer birth day and birth year when only knowing the birth month is sufficient for the business process. Data redaction is the process of removing, obscuring, or masking data that is not necessary after collection. Data minimization is where data is collected, and the bare minimum amount of data needed to accomplish a task is kept. The major difference is in when the masking or removal occurs. Minimization occurs before or during the collection, whereas redaction occurs after the collection process is completed.
+
+Careful monitoring of access, use, and modification to controlled data sets may be required, and data loss prevention (DLP) programs such as Microsoft's Purview DLP or Trellix Data Loss Prevention should be implemented to ensure compliance with data regulations. These applications can help in monitoring data used by the system throughout its lifecycle, from collection to destruction. Many of these tools require a very distinct assignment of data classification and labeling to be effective. This process commonly uses labels such as "public," "internal," "confidential," "secret," or even "top secret" labels to justify specific controls that should be implemented to protect the data.
+
+These programs and practices establish the requirements for safe collection, use, transport, and storage of certain data. If an AI system is being used in the collection or processing of regulated data, these minimum controls and practices must be in place. If they are not followed, an organization can face fines or restrictions on its data collection practices. Controls should be put into place to minimize the amount and type of data necessary to be retained and stored by the organization. This can minimize risk for the organization should a data breach or incident occur.
+
+Question 1
+
+Flag for Review
+
+Check Answer
+What is the primary benefit of encrypting data in transit in AI systems?
+
+answer
+
+It anonymizes all user data before any processing occurs.
+
+
+It prevents unauthorized interception and reading of sensitive data sent over a network.
+
+Correct Answer:
+Correct
+
+It protects data from being modified while stored on a physical hard drive.
+
+
+It increases the computational speed of the AI system when handling user requests.
+
+Explanation
+It prevents unauthorized interception and reading of sensitive data sent over a network is the correct answer. Encrypting data in transit ensures that sensitive information traveling between endpoints (such as between an AI system and a user) cannot be intercepted and read by unauthorized parties.
+
+It protects data from being modified while stored on a physical hard drive is incorrect. This describes the protection of data at rest, not data in transit.
+
+It anonymizes all user data before any processing occurs is incorrect. Encryption in transit does not anonymize user data; it only protects its confidentiality while moving between systems.
+
+It increases the computational speed of the AI system when handling user requests is incorrect. Encryption generally adds some computational overhead rather than increasing computational speed.
+
+Question 2
+
+Flag for Review
+
+Check Answer
+An international healthcare company is developing an AI-powered system to process patient data for improving treatment recommendations. The company operates in regions governed by various data compliance regulations, including the European Union's GDPR and the US HIPAA.
+
+During the design phase, the project manager must choose the most appropriate data safety measure to ensure compliance with these regulations when handling sensitive personal data.
+
+Which action BEST demonstrates compliance with regulatory data safety requirements during the design of this AI system?
+
+answer
+
+Anonymize all patient data after system deployment, and only apply access controls if a data breach is detected.
+
+Incorrect answer:
+Incorrect
+
+Classify all patient data using appropriate labels (e.g., confidential, restricted), restrict access based on role, and ensure monitoring and auditing of data handling according to applicable data compliance standards.
+
+Correct Answer:
+Correct
+
+Allow all development staff unrestricted access to patient data for maximum system functionality, as long as they sign a company's privacy policy.
+
+
+Store the entire data set, including identifying details, outside the company's secured network for easier cross-team collaboration in different regions.
+
+Explanation
+Classifying all patient data with appropriate labels (e.g., confidential, restricted), enforcing role-based access control, and monitoring data handling per regulations is correct. This follows best practices like GDPR and HIPAA: assigning labels, restricting access, and monitoring access ensures both compliance and patient privacy.
+
+Allowing all development staff unrestricted access to patient data with just a signed privacy policy is incorrect. Legal agreements alone do not fulfill compliance; regulations require technical and procedural safeguards, including limited access and ongoing monitoring.
+
+Storing the entire dataset, including identifiers, outside the secured company network for easier collaboration is incorrect. This violates compliance standards and exposes data to unauthorized access, breaches, and legal risks.
+
+Anonymizing patient data only after deployment and adding access controls only after a breach is incorrect. Access controls and anonymization must be proactive for true compliance.
+
+Question 3
+
+Flag for Review
+
+Check Answer
+A financial services company is building an AI system to recommend credit products to its customers.
+
+During development, the team notices that the AI's recommendations are consistently favoring certain customer groups over others, resulting in unequal credit product offers. You are asked to apply data safety measures to address the risks linked to bias and the quality of data input.
+
+Which of the following actions should you take FIRST to address this issue and improve the fairness of the AI model?
+
+answer
+
+Reiterate to the AI development team that malicious data leaks must be reported promptly according to the company's data breach policy.
+
+Incorrect answer:
+Incorrect
+
+Encrypt all emails between the data science team and IT operations to protect discussions about the model's architecture and customer data.
+
+
+Strengthen encryption on all stored AI models so that unauthorized access to the recommendation outputs is prevented.
+
+
+Review and clean the training data set to identify and remove biased or poor-quality data before retraining the AI system.
+
+Correct Answer:
+Correct
+Explanation
+Reviewing and cleaning the training data to remove biased or poor-quality data before retraining the AI system is correct. This directly improves input data quality and reduces bias, ensuring AI models generate fair and accurate results. High-quality, representative data is essential for mitigating unintended bias.
+
+Reminding staff to promptly report malicious data leaks is incorrect. While reporting breaches is important, this does not address the fairness or quality of training data, but focuses on incident response.
+
+Strengthening encryption on stored AI models is incorrect. Encryption protects against unauthorized access, not against bias or poor-quality training data, and does not improve model fairness or accuracy.
+
+Encrypting team emails is incorrect. While this secures communication, it does not address data quality or bias in AI training data.
+
+Question 4
+
+Flag for Review
+
+Check Answer
+Which of the following are considered special protection mechanisms used as data security controls for AI systems to ensure regulatory compliance? (Select two.)
+
+answer
+
+Encryption
+
+Correct Answer:
+Correct
+
+Ignoring data classification
+
+
+Data masking
+
+Correct Answer:
+Correct
+
+Disabling firewalls
+
+Incorrect answer:
+Incorrect
+
+Increasing data storage capacity
+
+Explanation
+Encryption is a correct answer. Encryption is a special protection mechanism for AI data. It ensures that information is unreadable to unauthorized users, which is essential for compliance with various regulatory and security standards.
+
+Data masking is a correct answer. Data masking is another special protection mechanism. It involves replacing real data with fictional or obfuscated data to prevent exposure of sensitive information, helping organizations meet compliance requirements.
+
+Increasing data storage capacity is incorrect. While increasing storage capacity may be necessary for handling large datasets, it is not a special protection mechanism for ensuring the security or compliance of AI data.
+
+Disabling firewalls is incorrect. Disabling firewalls actually decreases the security of information systems and exposes them to unauthorized access or attacks; it is the opposite of a protective measure for AI data.
+
+Ignoring data classification is incorrect. Ignoring data classification undermines data security and regulatory compliance efforts, as proper classification is necessary for applying appropriate controls and protection measures to sensitive information.
+
+Question 5
+
+Flag for Review
+
+Check Answer
+A healthcare company is developing an AI-driven application that collects sensitive patient information via web forms and transmits this data to a cloud-based AI model for analysis.
+
+The security team is responsible for ensuring the confidentiality of patient data while it is moving from the user's browser to the cloud infrastructure.
+
+Which of the following is the BEST solution for this requirement?
+
+answer
+
+Use data masking in the database to obscure sensitive data and require regular password updates for users.
+
+Incorrect answer:
+Incorrect
+
+Implement TLS 1.3 encryption for all data transmissions between the web application and the cloud AI service.
+
+Correct Answer:
+Correct
+
+Rely on password protection for user accounts in the web portal, and use HTTP for data transmission.
+
+
+Perform data anonymization before storing the information in the database, and allow data to be sent over plain FTP.
+
+Explanation
+Implement TLS 1.3 encryption for all data transmissions between the web application and the cloud AI service is correct. TLS 1.3 provides strong end-to-end encryption for data in transit, preventing sensitive information from being intercepted or read during transmission.
+
+Relying on password protection with HTTP for data transmission is incorrect. Passwords restrict access, but HTTP does not encrypt transmitted data, making it vulnerable to interception.
+
+Using data masking in the database and requiring password updates is incorrect. Data masking protects data at rest, not during transmission. Password updates don't secure data as it travels over the network.
+
+Performing data anonymization before storage and sending data over plain FTP is incorrect. Anonymization helps privacy but doesn't guarantee full protection, and FTP leaves data exposed to interception. Encryption in transit is essential.
+
+Question 6
+
+Flag for Review
+
+Check Answer
+A healthcare company is developing an AI model to assist medical staff in diagnosing patients using sensitive health records.
+
+During a recent data breach simulation, the company discovered that some patient records were accessed by unauthorized personnel because raw data sets with unredacted personal and medical information were used for AI training.
+
+As the new data security lead, what is the BEST step to apply data safety measures and reduce the risk of data breaches involving sensitive patient records during future AI training?
+
+answer
+
+Regularly review and update the data privacy policy, making sure all employees electronically sign it to acknowledge receipt and understanding of the policy.
+
+Incorrect answer:
+Incorrect
+
+Limit patient record access by physically securing the server room with advanced locks and 24/7 surveillance.
+
+
+Implement data anonymization and data minimization practices before using patient records in AI model training.
+
+Correct Answer:
+Correct
+
+Send a company-wide memo instructing employees to never share patient data outside the work environment.
+
+Explanation
+Implementing data anonymization and data minimization before using patient records in AI model training is correct. Anonymization removes identifying details, protecting privacy even if data is accessed improperly. Minimization restricts data use to only what's necessary, reducing exposure and breach impact.
+
+Sending a memo instructing employees not to share patient data is incorrect. While awareness is useful, memos alone don't actively control or protect data during AI training.
+
+Physically securing server rooms is incorrect. Physical security protects hardware, but doesn't address digital risks or the use of real, unmasked data in AI models. Sensitive data can still be misused or exposed during processing.
+
+Updating privacy policies for employee acknowledgment is incorrect. Policies alone do not prevent breaches—technical controls are required.
+
+Question 7
+
+Flag for Review
+
+Check Answer
+Which of the following technologies is specifically designed to help protect data while it is being actively processed or used by an AI system?
+
+answer
+
+Data classification labeling (such as "Confidential" or "Top Secret")
+
+Incorrect answer:
+Incorrect
+
+File-level encryption
+
+
+Secure Sockets Layer (SSL)
+
+
+Trusted Execution Environment (TEE)
+
+Correct Answer:
+Correct
+Explanation
+Trusted Execution Environment (TEE) is correct. A TEE is a secure processor area that protects data while it is actively being processed ("in use"), keeping sensitive data isolated from the rest of the system.
+
+File-level encryption is incorrect. It secures data at rest but does not protect it during processing.
+
+Secure Sockets Layer (SSL) is incorrect. SSL encrypts data in transit, not during CPU or AI system processing.
+
+Data classification labeling (such as "Confidential" or "Top Secret") is incorrect. Labels indicate data sensitivity and handling requirements, but do not themselves protect or encrypt data in use. Actual protection during processing requires approaches like TEE.
+
+Question 8
+
+Flag for Review
+
+Check Answer
+Which of the following are examples of data compliance and regulatory programs mentioned as important for AI data security controls? (Select three.)
+
+answer
+
+OpenAI Model Licensing Agreement
+
+Incorrect answer:
+Incorrect
+
+National Security Agency Encryption Mandate
+
+Incorrect answer:
+Incorrect
+
+Data Masking Protocol (DMP)
+
+
+Fair Use Doctrine
+
+Incorrect answer:
+Incorrect
+
+General Data Protection Regulation (GDPR)
+
+Correct Answer:
+Correct
+
+Payment Card Industry Data Security Standard (PCI-DSS)
+
+Correct Answer:
+Correct
+
+Health Insurance Portability and Privacy Act (HIPAA)
+
+Correct Answer:
+Correct
+Explanation
+General Data Protection Regulation (GDPR) is a correct answer. GDPR is a key regulatory compliance program from the European Union important for protecting and regulating data security for AI systems.
+
+Health Insurance Portability and Privacy Act (HIPAA) is a correct answer. HIPAA is a United States regulation that governs how medical information is protected and is a regulatory program relevant to AI data security.
+
+Payment Card Industry Data Security Standard (PCI-DSS) is a correct answer. PCI-DSS is an industry standard that sets requirements for organizations handling credit card information; it is also a compliance program that impacts AI data security controls.
+
+OpenAI Model Licensing Agreement is incorrect. This is not a regulatory compliance program for data protection; it is a hypothetical licensing agreement unrelated to industry-recognized data protection standards.
+
+Fair Use Doctrine is incorrect. Fair Use is a legal doctrine related to copyright law and usage rather than a data compliance or regulatory program governing data security for AI.
+
+Data Masking Protocol (DMP) is incorrect. While data masking is a protective technique, Data Masking Protocol is not a recognized regulatory compliance program.
+
+The National Security Agency Encryption Mandate is incorrect. This mandate is not a recognized regulatory compliance or data protection program in the industry. Regulatory programs typically encompass industry-wide standards, rather than agency-specific directives.
+
+Question 9
+
+Flag for Review
+
+Check Answer
+A financial technology company is developing a machine learning (ML) model to detect fraudulent transactions using customer data that includes names, account numbers, transaction amounts, and locations.
+
+To comply with data privacy regulations, the company decides to implement data safety measures before sending any data to the development team for model training.
+
+Which of the following is the MOST appropriate way to apply data masking in this scenario?
+
+answer
+
+Provide real, unmasked data to the development team but require them to sign a non-disclosure agreement (NDA) to protect customer privacy.
+
+Incorrect answer:
+Incorrect
+
+Encrypt the entire dataset, including names, account numbers, amounts, and locations, and give the development team the encryption keys to decrypt and use all information.
+
+
+Replace customer names and account numbers with fictitious, yet consistently mapped, values in the dataset provided to the team while preserving real transaction amounts and locations.
+
+Correct Answer:
+Correct
+
+Permanently delete customer names and account numbers from all transaction records before sharing the data set with the team, so only transaction amounts and locations remain.
+
+Explanation
+Replacing customer names and account numbers with fictitious, yet consistently mapped, values in the dataset provided to the team while preserving real transaction amounts and locations is correct. Data masking replaces sensitive identifiers with fictional yet consistent values, reducing privacy risk while still letting the team analyze patterns for model training.
+
+Permanently deleting customer names and account numbers from all transaction records before sharing the data set with the team, so only transaction amounts and locations remain, is incorrect. This is data minimization, not masking. Removing identifiers can limit analysis if customer patterns matter for fraud detection.
+
+Encrypting the entire dataset and giving the team the decryption keys is incorrect. Encryption protects data at rest or in transit, not by masking sensitive information within workflows.
+
+Providing real, unmasked data with a non-disclosure agreement (NDA) is incorrect. An NDA is a legal, not technical, safeguard and doesn't prevent data misuse.
+
+Question 10
+
+Flag for Review
+
+Check Answer
+Your organization is developing a cloud-based AI application that processes and stores sensitive customer information, including personal identifiers.
+
+As a security measure, you are considering how to protect this data while it is stored on the cloud server but not being actively used or transmitted.
+
+Which of the following solutions should you implement to BEST address this requirement?
+
+answer
+
+Apply data masking techniques when the data is requested by users, and rely on operating system access controls for storage protection.
+
+Incorrect answer:
+Incorrect
+
+Enable multi-factor authentication (MFA) for all user accounts and regularly monitor access logs to detect suspicious activity, in addition to training staff on proper data handling procedures.
+
+
+Use a file-level encryption tool and store encryption keys in a cloud Key Management Service (KMS).
+
+Correct Answer:
+Correct
+
+Implement HTTPS to secure communications between users and the AI application, and require strong passwords for system login.
+
+Explanation
+Using a file-level encryption tool and storing encryption keys in a cloud Key Management Service (KMS) is correct. This encrypts stored data and secures keys, ensuring that data remains unreadable without proper authorization, even if storage is accessed.
+
+Implementing HTTPS and requiring strong passwords is incorrect. HTTPS protects data in transit, not at rest, and strong passwords secure logins but do not encrypt stored files.
+
+Applying data masking on user requests and relying on OS access controls is incorrect. Data masking is for display or processing, not storage. OS access controls alone are insufficient protection if the system is compromised; encryption is stronger.
+
+Enabling multi-factor authentication, monitoring logs, and training staff is incorrect. These improve access security and awareness but do not encrypt data at rest.
+
+Perform Monitoring and Auditing for AI Systems
+Exam Objectives
+2.5 Given a scenario, implement monitoring and auditing for AI systems.
+Monitoring and auditing AI systems can assist in understanding how the system is currently being used and managed. Monitoring may include documenting the number of queries and responses, but may also include the timeline of queries and responses to gauge how well the system is functioning and responding to workloads. We can also identify peak use times that may require modification in the performance of the system. This can ensure that the costs associated with the operation of the AI system are accurate.
+
+Prompt and Log Monitoring
+Prompt monitoring and log monitoring require the system administrator to capture, analyze, and respond to how the system is performing. This can assist in understanding the use of the system, but also ensure regulatory compliance and the optimization of performance.
+
+For prompts specifically, we would want to ensure the organization and its users understand the number of prompt queries and responses being submitted and retrieved. This can assist in the identification of peak use times and, where possible, the organization may want to increase the hardware to ensure reliable performance during those times.
+
+An organization should also evaluate the responses to ensure their accuracy and that users of the system are using it in accordance with the acceptable use guidelines and policies the organization has established. If a company is evaluating the system and is seeing an increase in the number of false or inaccurate responses, the system may have been inaccurately trained and may need to be retrained or modified to increase the accuracy of responses. It may also use this information to modify its guidelines and standard operating procedures of the system to ensure users are querying the system correctly.
+
+An organization can accomplish monitoring by logging the following items for the AI system:
+
+Input Prompts: monitoring for specific restricted input and formatting that may identify as input injection and malicious use of the system
+
+Model Response: monitor output for restricted or controlled data access and potential data exposure
+
+Latency: delay in response by the system; normally measured in milliseconds (ms)
+
+Stop Parameters: What was the result of the response? Did the user follow up with additional requests, or did they close the request?
+
+Error messages and codes
+
+Token use: How many were used and by whom; excessive use of tokens may indicate abuse.
+
+The organization should monitor the system for unsafe user behavior and potential attack vectors through the use of malicious code or inputs to the system. An organization should monitor the queries and user prompts for abusive or malicious content, sensitive or prohibited topics, or even the potential for contextual drift through the use of consecutive queries. This can be accomplished through the use of machine learning for pattern matching and specific keyword searches. This type of activity increases the possibility of a data leak or unauthorized access to the system or model. Depending on the model and data sets being used, there may be regulatory compliance programs that strictly require these logs to be created to document the use and access to the AI system. We should also be able to identify anomalies regarding how the model is being used and by whom.
+
+Prompts should be monitored in such a way that the input provided is responded to with reliable and high-quality outputs. This health monitoring ensures that the model does not drift from its control parameters and that any degradation in the response or unexpected behavior can be caught early for correction.
+
+Model-specific monitoring may include key performance indicators (KPIs) such as model accuracy, precision, and recall. ROC AUC and BLEU are common evaluation metrics used to identify performance issues within the model. Receiver Operating Characteristic (ROC) Area Under the Curve (AUC) is based on true positive and false positive rates, and gives an indication as to how well the model is able to distinguish between two model groups. BLEU or Bilingual Evaluation Understudy is used to evaluate language model performance, including the ability to translate input for the model to process. The calculated quality of human inputs is compared to a controlled set of inputs.
+
+Model drift should be tracked and evaluated to ensure outputs remain accurate, and if necessary, retrain the model to re-baseline the system. The use of pre-formatted canary prompts can be used to evaluate whether the model response is accurate, safe, and within established policy limits.
+
+Organizations should also consider log sanitization and have protections in place to prevent manipulation of the logs for the system. This ensures that the integrity of the logs is maintained.
+
+Logs should be sanitized for any sensitive or regulated data, such as personally identifiable information (PII) or personal health information (PHI). This may include social security numbers, credit card information, addresses, and phone numbers. This information may either be completely removed from the logs through data masking or partially redacted through tokenized data storage.
+
+Logs may also be encrypted to protect their contents from unauthorized access and viewing. It should also be considered that log files should always be set to read-only permission settings by administrators of the system. The use of remote logging also helps facilitate protection by having off-site copies of the logs that are not readily accessible to users.
+
+Performance and Cost Monitoring
+Performance monitoring can ensure that the system is able to meet the workload demand, but also that the system is properly configured for this optimized operation. Prompts are the user-provided inputs of what they want from the AI system, whereas a query is the backend structured request that is processed by the system to generate an output for the user.
+
+It's essential to understand how the system is able to respond to a heavy workload and that it is able to perform the queries and responses in a timely manner. Checking for accuracy in the responses also ensures that the model has not suffered from quality issues.
+
+Prompt compression is a method that may be used to reduce the complexity of a prompt while preserving its meaning and required information. This is necessary in order to reduce cost in a token-limited environment. This can also assist in speeding up inference and reduce cost since the workload to arrive at an output is lower.
+
+Performance should be monitored by looking at the number of requests and responses being submitted and supplied by the system. Monitoring of supplemental queries can drive improvements to the model to provide more accurate and detailed responses. For example, if every initial response requires supplemental queries to get to a satisfactory answer or output, the organization may need to improve the response detail and specificity to reduce the number of queries required. This can lead to faster solutions for the user and reduce the number of queries, which in turn reduces the cost of operation from both a workload stance and from a monetary perspective. One such metric for this is the cost per successfully completed task or per retrieved document by the system.
+
+AI systems do cost money to operate, and therefore, monitoring of the system can help the organization understand why the model costs the organization what it does. Specifically, if the logs indicate high usage of access tokens, an organization may want to implement restrictions on the number of tokens available to users. An organization may also want to monitor the number of requests or specific prompt usage to ensure the best configuration and billing model is selected.
+
+Each query and response causes a workload on the system to execute. Depending on how the system was configured, changes in the number of queries and responses can increase or decrease costs. Understanding the workload itself can help make better-informed decisions on how the system is built and engineered to operate. Heavily used systems may benefit from an increase in their computer, storage, and connectivity configuration. For example, an AI system that is being used to analyze and query large datasets will see a benefit in its performance by selecting better CPU/GPU and storage hardware. This high-performance hardware tends to cost the most, but can also reduce the latency and time needed to process the query. On low-use systems, the organization should consider reducing these hardware requirements to save money long-term as well.
+
+Data storage of prompts, queries, and output that are used in subsequent prompts can speed the process up. However, storage does cost the organization money. Retention policies that establish when certain data should be evicted from the record should be formalized. Additionally, deduplication and data eviction practices should be documented to reduce the cost of storage requirements of the system. Reducing and removing less important information from the system can allow for new and more important information to be stored. This can be accomplished through the use of a least recently used (LRU) eviction policy, where the oldest and outdated embeddings in system memory, cache, or vector database are removed when the system is at its predefined limits of operation.
+
+Rebuild frequency should also be documented. This allows the system to be rebuilt and the baseline to increase performance and relevancy. This may include retraining the model on newer or more accurate datasets to reduce hallucinations and bias within its operation.
+
+Performing a cost-benefit analysis will help the organization evaluate how changes to the system configuration will affect its performance and cost overall. The system budget should be enforced at all times through careful automated monitoring of the entire infrastructure. The organization may wish to break down costs based on the project or customer, or even look specifically at prompt input and response compared to the cost of the system computing needs to make it happen. Fine-grained analysis can ensure an organization maintains its established budget when operating an AI system.
+
+Quality and Compliance Auditing
+Hallucinations are where the system provides a response that seems to be plausible but is not factually based or correct. This is primarily a product of the model being trained on data sets that have inaccurate patterns or the dataset is biased or skewed toward a particular viewpoint. Bias refers to the tendency of the AI system to produce prejudiced or unfair outcomes in its responses.
+
+Fairness is a measurement of how the system's output treats different groups or individuals. This is a requirement under many regulatory and compliance programs where the AI system affects a person's opportunities, rights, or well-being. In order for this measurement and monitoring to occur, the system may need to access restricted and controlled data, such as demographic information or financial data
+
+Ensuring that the responses from the AI system are factually correct and specific to the request is important. If a user has to re-engineer their prompt several times to get the results they expect, that can delay work completion, but also increase the cost of operation of the system itself. This is based on different billing models where each request is billed for, or each request may require the use of a token to execute, thus increasing the cost. Accuracy in the response ensures that a user is provided with the most accurate response possible and that the response answers the request completely.
+
+An organization may seek to implement response confidence level monitoring to gauge the accuracy of responses. While monitoring the responses and the system's confidence in its responses, they should isolate potential issues of hallucinations, bias, and unfairness in the responses. This can help administrators and engineers understand how the model is performing and if there is a need for modification to increase the accuracy and confidence of the system's responses. Grounding checks can be used to tie the output from the AI system back to trusted data sources. This can help minimize the potential for hallucinations.
+
+Another tool commonly used for preventing hallucinations is retrieval-augmented generation (RAG) tuning.
+
+The organization should also establish Bilingual Evaluation Understudy (BLEU) and Recall-Oriented Understudy for Gisting Evaluations (ROUGE) to provide summary evaluation metrics. BLEU is commonly implemented using a scoring system to evaluate how overlapping words are shared between the generated summary and reference summaries. While this is a very simple evaluation process, it does not account for missing context in the summary. ROUGE evaluations are better suited for summarization evaluations as they look at the quantity and quality of overlapping content summaries and can tolerate paraphrasing of content.
+
+Counterfactual testing can be used to alter inputs and observe whether the system behavior changes based on those changes. This can assist in the identification of bias and ensuring explainability of the output. Organizations sometimes use a golden dataset of high-quality and trusted data to establish the absolute truth standard. This allows engineers to validate that system performance and behaviors are within organizational parameters, ensuring accountability. Golden datasets are also commonly used to establish consistent evaluations after system updates and audits.
+
+Routine auditing of all system logs can provide the necessary, and in some cases, the legally compliance-mandated insight into how the system is being used throughout the organization. These logs can provide a view into the queries and prompts that are being used as inputs, the responses and how accurate they are, and also can allow for detailed reporting into what the operation of the AI system costs to operate. Changes in system permissions should also be logged and justified with approval chains.
+
+Auditing of system logs can be a long and arduous process. It can be assisted through the use of automated processes.
+
+Access logs should be audited to ensure that the system is performing as it is intended. Careful attention should be paid to ensuring the least privilege principle of access is being maintained. In some cases, special configurations such as a break-glass workflow are configured to allow emergency use of elevated permissions by identified users in critical situations, such as an outage and system restoration after an outage. The justification and authorization of their use should also be logged. Revocation of these elevated permissions should be configured to automatically occur after a period of time or when the task is completed.
+
+Additionally, in large system configurations with multiple datasets, models, and endpoints, access logs should be audited across the entire platform to ensure compliance with organizational policies. The auditing process should be carefully monitored to ensure separation of duties to prevent log integrity issues from arising.
+
+Question 1
+
+Flag for Review
+
+Check Answer
+Why is prompt compression used as part of performance monitoring in AI systems?
+
+answer
+
+To reduce the workload and cost in token-limited environments
+
+Correct Answer:
+Correct
+
+To make logs more readable for administrators
+
+
+To automatically encrypt log files for protection
+
+
+To increase the frequency of error messages generated
+
+Explanation
+To reduce the workload and cost in token-limited environments is the correct answer. Compression minimizes the computational effort required, which lowers both latency and cost, making the system more efficient.
+
+To make logs more readable for administrators is incorrect. Prompt compression is unrelated to log readability.
+
+To increase the frequency of error messages generated is incorrect. The goal is cost reduction and performance improvement, not generating error messages.
+
+To automatically encrypt log files for protection is incorrect. Encrypting logs is a security practice, not related to prompt compression.
+
+Question 2
+
+Flag for Review
+
+Check Answer
+Which of the following best explains how adjusting the rebuild frequency of an AI system can impact its operation?
+
+answer
+
+Decreasing rebuild frequency eliminates the need for compliance audits
+
+Incorrect answer:
+Incorrect
+
+Increasing rebuild frequency can help reduce hallucinations and bias by incorporating new, accurate data
+
+Correct Answer:
+Correct
+
+Increasing rebuild frequency allows unlimited storage of historical data
+
+
+Decreasing rebuild frequency guarantees faster response times for the AI system
+
+Explanation
+Increasing rebuild frequency can help reduce hallucinations and bias by incorporating new, accurate data is the correct answer. More frequent rebuilds (retraining or updating) help address issues like hallucinations and bias by integrating current, higher-quality data.
+
+Decreasing rebuild frequency guarantees faster response times for the AI system is incorrect. Faster response times are not a guaranteed result of rebuild frequency; this depends more on hardware and configurations.
+
+Increasing rebuild frequency allows unlimited storage of historical data is incorrect. Rebuild frequency does not affect the system's historical data storage limits.
+
+Decreasing rebuild frequency eliminates the need for compliance audits is incorrect. Compliance audits remain necessary regardless of how often the system is rebuilt.
+
+Question 3
+
+Flag for Review
+
+Check Answer
+A healthcare organization uses an AI system to assist clinicians by providing medication recommendations. As part of your role in quality and compliance auditing, you notice some AI-generated responses sound uncertain or vague, while others are precise and confident.
+
+To improve reliability and safety, you decide to apply response confidence level monitoring as a recommended best practice.
+
+Which action should you take FIRST to apply response confidence level monitoring in line with quality and compliance standards?
+
+answer
+
+Configure the AI system to tag each recommendation with a confidence score, allowing clinicians and auditors to review and act on recommendations with low confidence levels.
+
+Correct Answer:
+Correct
+
+Increase the frequency of retraining for the AI system and require a periodic manual audit of all medication recommendations made over the last quarter to spot inconsistencies or errors.
+
+
+Audit access logs to ensure only authorized personnel are using the AI system, and set up automated alerts for unusual usage patterns or changes in system configuration that could impact decision accuracy.
+
+
+Archive all AI-generated recommendations and responses for five years, implementing strict role-based access control to ensure data integrity and compliance with healthcare regulations.
+
+Explanation
+Configuring the AI system to tag each recommendation with a confidence score, allowing clinicians and auditors to review and act on recommendations with low confidence levels, is the correct answer. Tagging each response with a confidence score aligns directly with response confidence level monitoring. This approach enables clinicians and auditors to identify and appropriately handle recommendations with low confidence, improving decision-making safety and facilitating targeted auditing.
+
+Increasing the frequency of retraining for the AI system and requiring a periodic manual audit of all medication recommendations made over the last quarter to spot inconsistencies or errors is incorrect. These actions do not apply confidence monitoring to individual AI responses. This is resource-intensive and retrospective, not a proactive solution for real-time confidence assessment.
+
+Auditing access logs to ensure only authorized personnel are using the AI system, and setting up automated alerts for unusual usage patterns or changes in system configuration that could impact decision accuracy, is incorrect. This does not relate to tracking or acting on the confidence level of individual AI recommendations. These actions help safeguard operations but do not provide insights into the quality or certainty of AI-generated responses.
+
+Archiving all AI-generated recommendations and responses for five years, implementing strict role-based access control to ensure data integrity and compliance with healthcare regulations, is incorrect. These are important for compliance, especially in healthcare, but do not involve monitoring or using response confidence levels to enhance the reliability of current recommendations provided to clinicians.
+
+Question 4
+
+Flag for Review
+
+Check Answer
+Your company's AI-powered loan approval system has shown a pattern where applicants from certain demographic groups receive disproportionately fewer approvals, even when their financial profiles are similar to those of other applicants.
+
+As a compliance auditor, you are tasked with applying quality and compliance auditing practices to address concerns regarding fairness in the AI system.
+
+Which of the following actions should you take FIRST to evaluate and address fairness issues in the AI system?
+
+answer
+
+Retrain the AI model using a golden dataset and immediately implement new policies that require manual review of all loan rejections while extending system access logs to cover all model predictions.
+
+Incorrect answer:
+Incorrect
+
+Analyze the AI system's outputs using counterfactual testing, altering applicant demographic variables to check if the output changes and thereby identify instances of bias or unfairness in decision-making.
+
+Correct Answer:
+Correct
+
+Focus on auditing all activity logs for suspicious administrative access and log manipulation to ensure that elevated permissions have not led to system bias, followed by encryption of logs.
+
+
+Increase storage capacity for the AI system so that a greater volume of applicant data can be retained, enabling future audits, and regularly prune logs using an LRU eviction system to optimize performance.
+
+Explanation
+Analyzing the AI system's outputs using counterfactual testing, altering applicant demographic variables to check if the output changes, and thereby identifying instances of bias or unfairness in decision-making is the correct answer. Counterfactual testing directly addresses fairness by systematically altering individual demographic variables in the data to observe if the AI decision changes. This can pinpoint bias in the model's predictions and is an efficient, targeted way to audit for fairness issues.
+
+Retraining the AI model using a golden dataset and immediately implementing new policies that require manual review of all loan rejections while extending system access logs to cover all model predictions is incorrect. This may help in the long term, but these actions are not the initial or most focused response for evaluating present fairness issues. Extending system access logs is more about tracking user behavior and security, not directly diagnosing fairness in automated decisions. This mixes procedural changes with AI modification without first isolating the problem.
+
+Focusing on auditing all activity logs for suspicious administrative access and logging manipulation to ensure that elevated permissions have not led to system bias, followed by encryption of logs, is incorrect. Encrypting logs is also a security-focused action. These steps do not apply AI fairness evaluation techniques covered in the uploaded material.
+
+Increasing storage capacity for the AI system so that a greater volume of applicant data can be retained, enabling future audits, and regularly pruning logs is incorrect. Log pruning and storage optimization are unrelated to the identification or remediation of bias or fairness issues in the AI model's outputs.
+
+Question 5
+
+Flag for Review
+
+Check Answer
+A company has deployed an AI system that processes thousands of customer queries daily. Recently, users have reported increased response times and inconsistent output quality, especially during peak hours.
+
+As the system administrator, you are tasked with improving the system's performance and ensuring cost-effectiveness.
+
+Which of the following adjustments should you prioritize based on best performance monitoring practices described in the reading?
+
+answer
+
+Mask personally identifiable information (PII) in stored prompts
+
+Incorrect answer:
+Incorrect
+
+Limit access to system logs by setting them to read-only
+
+
+Increase hardware resources during peak usage times
+
+Correct Answer:
+Correct
+
+Only audit for hallucinations in the AI system
+
+Explanation
+Increase hardware resources during peak usage times is the correct answer. Performance monitoring includes tracking query and response rates to identify peak usage times. Increasing hardware resources during those times directly addresses slow response and degraded output quality, aligning with best practices for optimized operation and ensuring the system can handle peak workloads efficiently.
+
+Limit access to system logs by setting them to read-only is incorrect. Limiting access to logs by setting them to read-only is a measure designed for protecting log integrity, not for improving live system performance or responsiveness during peaks.
+
+Only audit for hallucinations in the AI system is incorrect. Auditing for hallucinations is a quality and compliance activity. While important, it doesn't address the immediate performance issues of slow response time and workload management.
+
+Mask personally identifiable information (PII) in stored prompts is incorrect. Masking PII in stored prompts is a crucial log sanitization process for data privacy, but it does not impact the AI system's capacity to process queries or improve performance during peak hours.
+
+Question 6
+
+Flag for Review
+
+Check Answer
+What is one potential benefit of using prompt compression in environments where AI system usage is charged by token usage?
+
+answer
+
+It ensures all user prompts are fully encrypted for privacy
+
+Incorrect answer:
+Incorrect
+
+It reduces the number of tokens required, helping to control operational costs
+
+Correct Answer:
+Correct
+
+It eliminates the need for logging or monitoring AI inputs
+
+
+It guarantees all system responses are more accurate
+
+Explanation
+It reduces the number of tokens required, helping to control operational costs is the correct answer. Since many AI platforms charge based on tokens, prompt compression directly helps to lower the overall cost by using fewer tokens.
+
+It guarantees all system responses are more accurate is incorrect. Prompt compression does not guarantee accuracy, although it can help responses be more direct.
+
+It ensures all user prompts are fully encrypted for privacy is incorrect. Compression is not a form of encryption for privacy; these are separate processes.
+
+It eliminates the need for logging or monitoring AI inputs is incorrect. Logging and monitoring remain necessary regardless of prompt compression strategies.
+
+Question 7
+
+Flag for Review
+
+Check Answer
+Which of the following is a recommended action if prompt and log monitoring detect model drift in an AI system?
+
+answer
+
+Retrain the model to re-baseline its performance
+
+Correct Answer:
+Correct
+
+Apply manual rule-based overrides to compensate for the drift
+
+
+Increase the model's confidence threshold so fewer predictions are returned
+
+
+Temporarily narrow the model's scope of use without adjusting the training data
+
+Explanation
+Retraining the model to re-baseline its performance is the correct answer. When model drift is detected, the recommended action is to retrain the model using updated, higher-quality, or more representative datasets. This process recalibrates the model so that its predictions align with current data patterns and business requirements, effectively re-baselining performance. Retraining helps restore accuracy, relevance, and reliability, and it can be tracked and validated as part of a formal MLOps or AI governance process.
+
+Applying manual rule-based overrides to compensate for the drift is incorrect. Introducing manual rules or "patches" on top of a drifting model may appear to fix issues quickly, but it does not address the underlying problem: the model's learned patterns no longer match real-world data. Over time, rule-based overrides can become complex, brittle, and hard to maintain, masking deeper accuracy and bias issues. Best practice is to retrain or update the model so its statistical behavior itself is corrected.
+
+Temporarily narrowing the model's scope of use without adjusting the training data is incorrect. Limiting where or how a model is used can reduce immediate risk, but it does not resolve model drift. The model will continue to be misaligned with the evolving data environment, and as usage expands again, the same or worse performance problems will reappear. Scope restriction can be a short-term risk control, but recommended practice is to retrain or recalibrate the model based on current data, not simply constrain its deployment.
+
+Increasing the model's confidence threshold so fewer predictions are returned is incorrect. Raising the confidence threshold can make the system appear safer but a drifting model can still be confidently wrong if its internal representation is outdated or misaligned. Adjusting thresholds is a tuning step, not a remediation for drift. When monitoring shows true model drift, the underlying model should be retrained or updated to restore trustworthy performance rather than merely filtering its outputs more aggressively.
+
+Question 8
+
+Flag for Review
+
+Check Answer
+When monitoring AI system responses, what is a primary reason for evaluating the accuracy of those responses?
+
+answer
+
+To ensure users are submitting prompts in the correct language
+
+Incorrect answer:
+Incorrect
+
+To identify when the system may require retraining for improved performance
+
+Correct Answer:
+Correct
+
+To increase the number of response tokens used by the AI system
+
+
+To allow users to bypass security restrictions
+
+Explanation
+To identify when the system may require retraining for improved performance is the correct answer. Monitoring response accuracy helps organizations detect if the AI model is producing inaccurate or low-quality outputs, which may signal issues like model drift and the need for retraining to restore or improve performance.
+
+To ensure users are submitting prompts in the correct language is incorrect. While prompt language is important, response monitoring is not primarily focused on verifying prompt language but rather on the quality and accuracy of the AI's outputs.
+
+To increase the number of response tokens used by the AI system is incorrect. The goal of monitoring responses is to ensure quality and accuracy, not to increase token use, which could actually increase costs unnecessarily.
+
+To allow users to bypass security restrictions is incorrect. Security should not be compromised; monitoring aims to enforce, not bypass, policies and restrictions.
+
+Question 9
+
+Flag for Review
+
+Check Answer
+During prompt and log monitoring for an AI system, which of the following are typically logged to support operational monitoring and regulatory compliance? (Select three.)
+
+answer
+
+Detailed user mouse movements within the application
+
+Incorrect answer:
+Incorrect
+
+Operating system version on user devices
+
+Incorrect answer:
+Incorrect
+
+Network packet loss rates for all connected devices
+
+Incorrect answer:
+Incorrect
+
+Input prompts submitted to the AI system
+
+Correct Answer:
+Correct
+
+Model responses generated for users
+
+Correct Answer:
+Correct
+
+System latency or response time measurements
+
+Correct Answer:
+Correct
+
+CPU temperature statistics for the server hardware
+
+Explanation
+Input prompts submitted to the AI system is a correct answer. Input prompts are logged to monitor what users are asking the AI system. This helps in tracking for potentially restricted inputs, injection attempts, and monitoring for compliance with organizational policies.
+
+Model responses generated for users is a correct answer. Logging model responses is essential for auditing what information the AI system provides to users. This supports data loss prevention efforts and ensures that the system is not releasing sensitive or inappropriate content.
+
+System latency or response time measurements is a correct answer. Tracking system latency (how long the system takes to respond) helps identify performance bottlenecks. It ensures the system can handle workload demands efficiently and alerts administrators to potential operational issues.
+
+CPU temperature statistics for the server hardware is incorrect. CPU temperature is a technical hardware metric not directly related to prompt or log monitoring for AI system inputs, outputs, or audit purposes. While useful elsewhere, it is outside the scope of AI-specific monitoring.
+
+Operating system version on user devices is incorrect. While OS version might be important in endpoint management or compatibility audits, it is not a standard item logged by AI prompt or log monitoring processes.
+
+Detailed user mouse movements within the application is incorrect. Tracking user mouse movements is more relevant to UI/UX analytics, not to AI system prompt and log monitoring—where the focus is on transactional and compliance-related data.
+
+Network packet loss rates for all connected devices is incorrect. Packet loss monitoring is related to general network health, not specific to the prompts, responses, or compliance logs managed by an AI system.
+
+Question 10
+
+Flag for Review
+
+Check Answer
+An AI-powered knowledge base system provides technical answers to users based on a mix of internal company documents and internet-sourced data. Recently, some users complained that responses, while confidently delivered, were sometimes incorrect or out-of-date.
+
+As an auditor focused on quality and compliance, you must apply appropriate techniques to ensure that the system's answers are factually correct.
+
+What is the FIRST step you should take to address this issue in line with quality and compliance auditing practices?
+
+answer
+
+Implement grounding checks to verify that AI-generated answers are tied back to trusted, up-to-date data sources, ensuring responses are factually accurate.
+
+Correct Answer:
+Correct
+
+Request that users escalate incorrect responses to a manual review team, create a policy for retroactive correction of all previously delivered answers, and require weekly retraining.
+
+
+Increase the frequency of system restarts and purge the cache regularly to eliminate outdated information that may be influencing responses, then notify IT staff to monitor changes.
+
+
+Optimize log retention settings to maximize available storage for prompts and responses, and set up a deduplication process to keep only unique knowledge base entries for audit efficiency.
+
+Explanation
+Implementing grounding checks to verify that AI-generated answers are tied back to trusted, up-to-date data sources, ensuring responses are factually accurate, is the correct answer. Implementing grounding checks ensures that each response can be traced back to an accurate, trusted source, which directly addresses the problem of factual inaccuracies in AI-generated content. This aligns closely with best practices.
+
+Increasing the frequency of system restarts and purging the cache regularly to eliminate outdated information that may be influencing responses, then notifying IT staff to monitor changes, is incorrect. Regular system restarts and purging the cache may help clear some outdated information from memory but do not directly ensure responses are fact-checked or corrected. These technical actions lack a targeted audit approach for validating answers.
+
+Requesting that users escalate incorrect responses to a manual review team, creating a policy for retroactive correction of all previously delivered answers, and requiring weekly retraining is incorrect. This response is reactive and resource-intensive. It doesn't provide a systematic, immediate method to ensure that all future AI responses are grounded in fact, nor does it use automated techniques for ongoing quality assurance.
+
+Optimizing log retention settings to maximize available storage for prompts and responses, and setting up a deduplication process to keep only unique knowledge base entries for audit efficiency, is incorrect. Maximizing log storage and deduplicating entries do not help identify or correct factually inaccurate information provided to users. These steps focus on data management, not the content's truthfulness or its verification against trusted sources.
