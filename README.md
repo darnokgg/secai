@@ -1,42 +1,72 @@
 # 🛡️🤖 SecAI+ Prep Portal (CompTIA CY0-001)
 
-A modern, interactive, and fully client-side training portal prepared for the **CompTIA SecAI+ (CY0-001) Certification Exam**. This application features study tools, interactive games, an AI-powered tutor, and cloud-synced leaderboards.
+An interactive, web-based training companion for the **CompTIA SecAI+ (CY0-001) Certification Exam**. 
+
+This portal is intended for students and cybersecurity professionals preparing for the SecAI+ exam. It provides a visual, hands-on environment to master vocabulary, practice quiz questions, explore OWASP AI vulnerabilities, and study key concepts in securing machine learning systems.
 
 ---
 
-## 🚀 Key Features
+## ⚙️ Quick Start (Download and Run)
 
-* **📝 Practice Quiz:** Build custom quiz sessions filtered by exam modules, run domain-weighted full exam simulations, review answers with detailed explanations, and track your missed questions.
-* **🧩 Vocab Matcher:** An interactive matching game to test your vocabulary on essential CompTIA SecAI+ terminology.
-* **🎴 Flashcards:** Dynamic domain-filtered study cards with direct security contexts. Tap to flip and mark cards as mastered.
-* **📖 Glossary Explorer:** Search and explore 350+ glossary terms dynamically across the official syllabus domains.
-* **🔥 OWASP Top 10 for AI:** Interactive overview cards, threat-matching games, and a **Prompt Injection Lab** to identify AI-specific attacks.
-* **🤖 AI Study Tutor:** Connects directly to Google Gemini or OpenAI ChatGPT using your private browser-stored API key to answer questions in real-time.
-* **🏆 Unified Leaderboards:** Combined local (browser-stored) and cloud-synced (Supabase) tables for both study progress and arcade high scores, annotated with `CLOUD` and `LOCAL` badges.
+You don't need any complex servers or database setups to start studying. By default, the app runs entirely **offline** on your local machine using your browser's built-in storage.
 
----
-
-## ⚙️ How to Download and Start
-
-### 1. Clone the Repository
-Download the project files to your local machine:
+### 1. Download the Files
+Clone this repository to your local computer:
 ```bash
 git clone https://github.com/darnokgg/secai.git
 cd secai
 ```
 
-### 2. Configure Database & Keys
-Copy the example configuration file and fill in your Supabase credentials:
-1. Rename `config.example.js` to `config.js`.
-2. Open `config.js` and enter your project URL and public anon key:
+### 2. Run the App
+Since this is a lightweight, pure client-side application, you can run it instantly:
+
+* **Option A: Direct Launch (Easiest)**
+  Simply double-click the `index.html` file in your file explorer to open the portal directly in your web browser.
+* **Option B: Run a Simple Local Server (Recommended)**
+  To avoid browser security restrictions (CORS) when using advanced features or scripts, serve the directory locally:
+  * **Using Python:**
+    ```bash
+    python -m http.server 8000
+    ```
+  * **Using Node.js:**
+    ```bash
+    npx serve
+    ```
+  Then open your browser and navigate to `http://localhost:8000` (Python) or `http://localhost:3000` (Node).
+
+---
+
+## 🚀 Key Features
+
+* **📝 Practice Quiz:** Build customized study sessions, select modules to focus on, toggle domain-weighted simulation exams, and review explanations for incorrect answers.
+* **🧩 Vocab Matcher:** Match terms with definitions in a timed game to build muscle memory for key exam vocabulary.
+* **🎴 Flashcards:** Domain-filtered cards with direct security contexts. Tap to flip, review, and mark terms as mastered.
+* **📖 Glossary Explorer:** Search and look up 350+ official glossary terms grouped by exam domains.
+* **🔥 OWASP Top 10 for AI:** Interactive overview cards, matching games, and a **Prompt Injection Lab** to practice identifying AI attacks.
+* **🤖 AI Study Tutor:** Connects directly to Google Gemini or OpenAI ChatGPT using your private browser-stored API key to answer study questions.
+* **🏆 Combined Leaderboards:** View local progress and arcade high scores directly inside the Progress tab.
+
+---
+
+## 🗄️ Setting Up Your Own Leaderboard (Optional)
+
+If you want to host your own shared leaderboards to sync scores and student progress across multiple devices, you can hook the app up to a free **Supabase** cloud database.
+
+### 1. Create a Supabase Project
+1. Sign up for a free account at [Supabase](https://supabase.com).
+2. Create a new project and retrieve your **Project URL** and **anon public API key**.
+
+### 2. Configure Credentials
+1. In the project directory, duplicate `config.example.js` and rename it to `config.js`.
+2. Open `config.js` and paste your credentials:
    ```javascript
    const SUPABASE_URL = "https://your-project-id.supabase.co";
    const SUPABASE_ANON_KEY = "your-public-anon-key";
    ```
-*(Note: `config.js` is automatically listed in `.gitignore` to prevent you from accidentally committing your private API keys to GitHub).*
+*(Note: `config.js` is automatically listed in `.gitignore` so your API keys are never pushed to public repositories).*
 
-### 3. Initialize the Database (Supabase)
-To enable the unified leaderboards, create a free project at [Supabase](https://supabase.com), go to the **SQL Editor**, and run the following setup script:
+### 3. Initialize the SQL Tables
+Go to the **SQL Editor** in your Supabase dashboard and run the following script to generate the database tables and enable Row Level Security (RLS):
 
 ```sql
 -- 1. Create the Study Leaderboard table
@@ -51,7 +81,7 @@ CREATE TABLE IF NOT EXISTS public.secai_study_leaderboard (
     CONSTRAINT unique_client_profile UNIQUE (client_id, profile_name)
 );
 
--- Enable RLS (Row Level Security)
+-- Enable RLS
 ALTER TABLE public.secai_study_leaderboard ENABLE ROW LEVEL SECURITY;
 
 CREATE POLICY "Allow public select" ON public.secai_study_leaderboard FOR SELECT USING (true);
@@ -73,28 +103,4 @@ ALTER TABLE public.secai_tetris_leaderboard ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Allow public select" ON public.secai_tetris_leaderboard FOR SELECT USING (true);
 CREATE POLICY "Allow public insert" ON public.secai_tetris_leaderboard FOR INSERT WITH CHECK (true);
 ```
-
-### 4. Run the Application
-Since the application runs 100% client-side in the browser, you can launch it in two ways:
-
-#### Option A: Direct Open (Easiest)
-Simply double-click the `index.html` file in your file explorer to open it in any web browser.
-
-#### Option B: Serve Locally (Recommended)
-If your browser restricts local filesystem API calls (like fetching local scripts or using certain web APIs), serve the files using a simple HTTP server.
-* **Using Python:**
-  ```bash
-  python -m http.server 8000
-  ```
-* **Using Node.js:**
-  ```bash
-  npx serve
-  ```
-Then open your browser and navigate to `http://localhost:8000` (Python) or `http://localhost:3000` (Node).
-
----
-
-## 🛠️ Stack and Design System
-* **Core:** Pure HTML5 and Vanilla JS logic.
-* **Styles:** Custom Vanilla CSS styling utilizing sleek dark-mode glassmorphism, glowing accents, and responsive layout tables.
-* **Database:** Supabase (Postgres) via CDN client library.
+Once configured, the portal will automatically detect the keys and sync progress to your cloud database!
