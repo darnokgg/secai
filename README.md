@@ -18,12 +18,12 @@ cd secai
 ```
 
 ### 2. Run the App
-Since this is a lightweight, pure client-side application, you can run it instantly:
+Since this is a lightweight, pure client-side application, you can run it instantly in two ways:
 
-* **Option A: Direct Launch (Easiest)**
-  Simply double-click the `index.html` file in your file explorer to open the portal directly in your web browser.
-* **Option B: Run a Simple Local Server (Recommended)**
-  To avoid browser security restrictions (CORS) when using advanced features or scripts, serve the directory locally:
+* **Option A: Direct Launch (Easiest & Recommended for general use)**
+  Simply double-click the `index.html` file in your file explorer to open the portal directly in your web browser. This is completely fine for normal study and usage.
+* **Option B: Run a Local Server (Optional)**
+  If your web browser restricts API requests (like fetching CDN libraries, Supabase DB operations, or local assets) when loading files directly from the local filesystem via the `file://` protocol, you can serve the directory using a lightweight HTTP server:
   * **Using Python:**
     ```bash
     python -m http.server 8000
@@ -32,7 +32,9 @@ Since this is a lightweight, pure client-side application, you can run it instan
     ```bash
     npx serve
     ```
-  Then open your browser and navigate to `http://localhost:8000` (Python) or `http://localhost:3000` (Node).
+  Then navigate to `http://localhost:8000` (Python) or `http://localhost:3000` (Node) in your browser. 
+
+* **Which should I choose?** Double-clicking `index.html` works perfectly for almost all users. Running a local server is only necessary if your browser console outputs strict security or CORS errors when attempting to load the database or tutor features.
 
 ---
 
