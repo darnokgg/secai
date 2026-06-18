@@ -23,7 +23,7 @@
 | Glossary Terms | 0 / 355 | 0% |
 
 ## 📖 Glossary & Key Terms Log
-| Term | Domain | Definition | Context |
+| Term | Module | Definition | Context |
 | --- | --- | --- | --- |
 | **ABAC (Attribute-Based)** | Domain 4 | Fine-grained access control model that grants permissions based on attributes of User, Resource, and Environment context. | Ideal for AI systems requiring dynamic, context-aware decisions (e.g. limiting model calls to office hours/devices). |
 | **Access Control** | Domain 3 | The process of determining and assigning privileges to resources, objects, and data. Each resource has an access control list (ACL) specifying what subjects (users and hosts) can do. | Ensures boundaries between different users and sensitive AI assets. |

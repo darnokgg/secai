@@ -369,13 +369,15 @@
         <!-- Flashcards View -->
         <div class="flashcards-control">
           <div class="filter-group">
-            <label for="flashcard-domain-filter">Domain Filter:</label>
+            <label for="flashcard-domain-filter">Module Filter:</label>
             <select id="flashcard-domain-filter" class="form-select">
-              <option value="all">All Domains</option>
-              <option value="Domain 1">Domain 1: AI Concepts & Cyber</option>
-              <option value="Domain 2">Domain 2: Securing AI Systems</option>
-              <option value="Domain 3">Domain 3: AI for SecOps</option>
-              <option value="Domain 4">Domain 4: GRC & Ethics</option>
+              <option value="all">All Modules</option>
+              <option value="Module 1">Module 1: AI & Data Concepts</option>
+              <option value="Module 2">Module 2: Threat Modeling & Securing AI</option>
+              <option value="Module 3">Module 3: Access Controls for AI</option>
+              <option value="Module 4">Module 4: AI Lifecycle & Compensating Controls</option>
+              <option value="Module 5">Module 5: Leveraging AI & Misuse</option>
+              <option value="Module 6">Module 6: AI Governance & GRC</option>
             </select>
           </div>
           <div class="card-counter">
@@ -418,10 +420,12 @@
           </div>
           <div class="filter-pills">
             <button class="pill-btn active" data-filter="all">All</button>
-            <button class="pill-btn" data-filter="Domain 1">Domain 1</button>
-            <button class="pill-btn" data-filter="Domain 2">Domain 2</button>
-            <button class="pill-btn" data-filter="Domain 3">Domain 3</button>
-            <button class="pill-btn" data-filter="Domain 4">Domain 4</button>
+            <button class="pill-btn" data-filter="Module 1">M1</button>
+            <button class="pill-btn" data-filter="Module 2">M2</button>
+            <button class="pill-btn" data-filter="Module 3">M3</button>
+            <button class="pill-btn" data-filter="Module 4">M4</button>
+            <button class="pill-btn" data-filter="Module 5">M5</button>
+            <button class="pill-btn" data-filter="Module 6">M6</button>
           </div>
         </div>
 
@@ -447,42 +451,60 @@
           </div>
 
           <div class="stat-breakdown-card">
-            <h3>Domain Coverage</h3>
+            <h3>Module Coverage</h3>
             <div class="domain-bars">
               <div class="domain-bar-group">
                 <div class="bar-label">
-                  <span>Domain 1: AI Concepts & Cyber</span>
-                  <span id="d1-progress-text">0%</span>
+                  <span>Module 1: AI & Data Concepts</span>
+                  <span id="m1-progress-text">0%</span>
                 </div>
                 <div class="bar-bg">
-                  <div id="d1-bar-fill" class="bar-fill fill-d1" style="width: 0%;"></div>
+                  <div id="m1-bar-fill" class="bar-fill fill-m1" style="width: 0%;"></div>
                 </div>
               </div>
               <div class="domain-bar-group">
                 <div class="bar-label">
-                  <span>Domain 2: Securing AI Systems</span>
-                  <span id="d2-progress-text">0%</span>
+                  <span>Module 2: Threat Modeling & Securing AI</span>
+                  <span id="m2-progress-text">0%</span>
                 </div>
                 <div class="bar-bg">
-                  <div id="d2-bar-fill" class="bar-fill fill-d2" style="width: 0%;"></div>
+                  <div id="m2-bar-fill" class="bar-fill fill-m2" style="width: 0%;"></div>
                 </div>
               </div>
               <div class="domain-bar-group">
                 <div class="bar-label">
-                  <span>Domain 3: AI for SecOps</span>
-                  <span id="d3-progress-text">0%</span>
+                  <span>Module 3: Access Controls for AI</span>
+                  <span id="m3-progress-text">0%</span>
                 </div>
                 <div class="bar-bg">
-                  <div id="d3-bar-fill" class="bar-fill fill-d3" style="width: 0%;"></div>
+                  <div id="m3-bar-fill" class="bar-fill fill-m3" style="width: 0%;"></div>
                 </div>
               </div>
               <div class="domain-bar-group">
                 <div class="bar-label">
-                  <span>Domain 4: GRC & Ethics</span>
-                  <span id="d4-progress-text">0%</span>
+                  <span>Module 4: AI Lifecycle & Compensating Controls</span>
+                  <span id="m4-progress-text">0%</span>
                 </div>
                 <div class="bar-bg">
-                  <div id="d4-bar-fill" class="bar-fill fill-d4" style="width: 0%;"></div>
+                  <div id="m4-bar-fill" class="bar-fill fill-m4" style="width: 0%;"></div>
+                </div>
+              </div>
+              <div class="domain-bar-group">
+                <div class="bar-label">
+                  <span>Module 5: Leveraging AI & Misuse</span>
+                  <span id="m5-progress-text">0%</span>
+                </div>
+                <div class="bar-bg">
+                  <div id="m5-bar-fill" class="bar-fill fill-m5" style="width: 0%;"></div>
+                </div>
+              </div>
+              <div class="domain-bar-group">
+                <div class="bar-label">
+                  <span>Module 6: AI Governance & GRC</span>
+                  <span id="m6-progress-text">0%</span>
+                </div>
+                <div class="bar-bg">
+                  <div id="m6-bar-fill" class="bar-fill fill-m6" style="width: 0%;"></div>
                 </div>
               </div>
             </div>

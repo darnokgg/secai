@@ -14,19 +14,21 @@ GLOSSARY_FILE = os.path.join(BASE, "sources", "glossary.txt")
 if sys.stdout:
     sys.stdout.reconfigure(encoding='utf-8')
 
-# Smart Domain categorization keywords
-DOMAIN_KEYWORDS = {
-    "Domain 4": ["risk", "policy", "governance", "regulation", "law", "nist", "gdpr", "compliance", "bias", "audit", "accountability", "ethics", "responsible", "agreement", "sla"],
-    "Domain 3": ["detect", "anomaly", "monitor", "alert", "siem", "soar", "ids", "incident", "log", "threat hunt", "edr", "operations", "analysis", "analyst"],
-    "Domain 2": ["threat", "attack", "jailbreak", "poisoning", "adversarial", "injection", "guardrail", "defense", "security control", "restrict", "access control", "rbac", "abac", "sandbox", "securing", "encryption"]
+# Smart Module categorization keywords
+MODULE_KEYWORDS = {
+    "Module 6": ["risk", "policy", "governance", "regulation", "law", "nist", "gdpr", "compliance", "bias", "audit", "accountability", "ethics", "responsible", "agreement", "sla"],
+    "Module 5": ["detect", "anomaly", "monitor", "alert", "siem", "soar", "ids", "incident", "log", "threat hunt", "edr", "operations", "analysis", "analyst"],
+    "Module 4": ["lifecycle", "life cycle", "compensating control", "adversarial training", "hardening", "training dataset", "data poisoning", "weight poisoning", "supply chain"],
+    "Module 3": ["access control", "rbac", "abac", "sandbox", "privilege", "role-based", "attribute-based", "restrict"],
+    "Module 2": ["threat modeling", "threat model", "attack", "jailbreak", "adversarial", "injection", "guardrail", "defense", "securing", "encryption"]
 }
 
 def guess_domain(term, definition):
     combined = (term + " " + definition).lower()
-    for domain, keywords in DOMAIN_KEYWORDS.items():
+    for domain, keywords in MODULE_KEYWORDS.items():
         if any(kw in combined for kw in keywords):
             return domain
-    return "Domain 1"
+    return "Module 1"
 
 def read_file(path):
     if not os.path.exists(path):
@@ -40,7 +42,7 @@ def parse_existing_glossary(md_content):
     in_table = False
     for line in lines:
         stripped = line.strip()
-        if stripped.startswith('|') and 'Term' in stripped and 'Domain' in stripped:
+        if stripped.startswith('|') and 'Term' in stripped and ('Domain' in stripped or 'Module' in stripped):
             in_table = True
             continue
         if in_table:
@@ -460,12 +462,12 @@ def main():
 
     # 4. Parse Modules 1-6
     module_metadata = {
-        1: {"title": "Explain AI Concepts for Cybersecurity", "color": "#fbbf24", "icon": "🧠", "tag": "Basic AI Concepts Related to Cybersecurity", "domain": "Domain 1"},
-        2: {"title": "Implementing Threat Modeling and Securing AI Systems", "color": "#f87171", "icon": "🎯", "tag": "Implementing Threat Modeling & Securing AI", "domain": "Domain 2"},
-        3: {"title": "Installing Access Controls for AI", "color": "#60a5fa", "icon": "🔑", "tag": "Access Controls & Data Security", "domain": "Domain 2"},
-        4: {"title": "Security in the AI Life Cycle & Compensating Controls", "color": "#a78bfa", "icon": "🔒", "tag": "AI Lifecycle & Security Controls", "domain": "Domain 2"},
-        5: {"title": "AI Tools in Security Operations & AI-Enabled Attacks", "color": "#38bdf8", "icon": "🛡️", "tag": "AI Tools & AI-Enabled Attacks", "domain": "Domain 3"},
-        6: {"title": "AI Governance, Risk & Compliance", "color": "#34d399", "icon": "📋", "tag": "AI Governance, Risk & Compliance", "domain": "Domain 4"}
+        1: {"title": "Explain AI Concepts for Cybersecurity", "color": "#fbbf24", "icon": "🧠", "tag": "Basic AI Concepts Related to Cybersecurity", "domain": "Module 1"},
+        2: {"title": "Implementing Threat Modeling and Securing AI Systems", "color": "#f87171", "icon": "🎯", "tag": "Implementing Threat Modeling & Securing AI", "domain": "Module 2"},
+        3: {"title": "Installing Access Controls for AI", "color": "#60a5fa", "icon": "🔑", "tag": "Access Controls & Data Security", "domain": "Module 3"},
+        4: {"title": "Security in the AI Life Cycle & Compensating Controls", "color": "#a78bfa", "icon": "🔒", "tag": "AI Lifecycle & Security Controls", "domain": "Module 4"},
+        5: {"title": "AI Tools in Security Operations & AI-Enabled Attacks", "color": "#38bdf8", "icon": "🛡️", "tag": "AI Tools & AI-Enabled Attacks", "domain": "Module 5"},
+        6: {"title": "AI Governance, Risk & Compliance", "color": "#34d399", "icon": "📋", "tag": "AI Governance, Risk & Compliance", "domain": "Module 6"}
     }
 
     parsed_questions = []
@@ -558,7 +560,7 @@ def main():
 
     # Glossary Section
     notes_lines.append("## 📖 Glossary & Key Terms Log")
-    notes_lines.append("| Term | Domain | Definition | Context |")
+    notes_lines.append("| Term | Module | Definition | Context |")
     notes_lines.append("| --- | --- | --- | --- |")
     for item in sorted_glossary:
         term_bold = f"**{item['term']}**"

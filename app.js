@@ -1616,35 +1616,43 @@ document.addEventListener('DOMContentLoaded', () => {
   const percentText = document.getElementById('progress-percentage-text');
   const overallMeta = document.getElementById('overall-completion-meta');
   
-  const d1ProgressText = document.getElementById('d1-progress-text');
-  const d1BarFill = document.getElementById('d1-bar-fill');
-  const d2ProgressText = document.getElementById('d2-progress-text');
-  const d2BarFill = document.getElementById('d2-bar-fill');
-  const d3ProgressText = document.getElementById('d3-progress-text');
-  const d3BarFill = document.getElementById('d3-bar-fill');
-  const d4ProgressText = document.getElementById('d4-progress-text');
-  const d4BarFill = document.getElementById('d4-bar-fill');
+  const m1ProgressText = document.getElementById('m1-progress-text');
+  const m1BarFill = document.getElementById('m1-bar-fill');
+  const m2ProgressText = document.getElementById('m2-progress-text');
+  const m2BarFill = document.getElementById('m2-bar-fill');
+  const m3ProgressText = document.getElementById('m3-progress-text');
+  const m3BarFill = document.getElementById('m3-bar-fill');
+  const m4ProgressText = document.getElementById('m4-progress-text');
+  const m4BarFill = document.getElementById('m4-bar-fill');
+  const m5ProgressText = document.getElementById('m5-progress-text');
+  const m5BarFill = document.getElementById('m5-bar-fill');
+  const m6ProgressText = document.getElementById('m6-progress-text');
+  const m6BarFill = document.getElementById('m6-bar-fill');
   
   const statQuizMastered = document.getElementById('stats-quiz-mastered');
   const statVocabMastered = document.getElementById('stats-vocab-mastered');
   const statVocabAccuracy = document.getElementById('stats-vocab-accuracy');
   const resetProgressBtn = document.getElementById('reset-progress-btn');
 
-  function calculateDomainStats() {
+  function calculateModuleStats() {
     const counts = {
-      d1: { total: 0, completed: 0 },
-      d2: { total: 0, completed: 0 },
-      d3: { total: 0, completed: 0 },
-      d4: { total: 0, completed: 0 }
+      m1: { total: 0, completed: 0 },
+      m2: { total: 0, completed: 0 },
+      m3: { total: 0, completed: 0 },
+      m4: { total: 0, completed: 0 },
+      m5: { total: 0, completed: 0 },
+      m6: { total: 0, completed: 0 }
     };
     
     glossary.forEach(item => {
       const d = item.domain.toLowerCase();
       let key = '';
-      if (d.includes('domain 1')) key = 'd1';
-      else if (d.includes('domain 2')) key = 'd2';
-      else if (d.includes('domain 3')) key = 'd3';
-      else if (d.includes('domain 4')) key = 'd4';
+      if (d.includes('module 1')) key = 'm1';
+      else if (d.includes('module 2')) key = 'm2';
+      else if (d.includes('module 3')) key = 'm3';
+      else if (d.includes('module 4')) key = 'm4';
+      else if (d.includes('module 5')) key = 'm5';
+      else if (d.includes('module 6')) key = 'm6';
       
       if (key) {
         counts[key].total++;
@@ -1655,14 +1663,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     questions.forEach(q => {
-      const d = q.domain.toLowerCase();
-      let key = '';
-      if (d.includes('domain 1')) key = 'd1';
-      else if (d.includes('domain 2')) key = 'd2';
-      else if (d.includes('domain 3')) key = 'd3';
-      else if (d.includes('domain 4')) key = 'd4';
-      
-      if (key) {
+      let key = 'm' + q.module;
+      if (counts[key]) {
         counts[key].total++;
         if (state.completedQuestions.includes(q.id)) {
           counts[key].completed++;
@@ -1692,28 +1694,38 @@ document.addEventListener('DOMContentLoaded', () => {
     percentText.textContent = `${overallPercent}%`;
     overallMeta.textContent = `${totalCompleted} of ${totalItems} items completed`;
     
-    // Domain calculations
-    const domCounts = calculateDomainStats();
+    // Module calculations
+    const modCounts = calculateModuleStats();
     
-    // D1
-    const d1Percent = domCounts.d1.total > 0 ? Math.round((domCounts.d1.completed / domCounts.d1.total) * 100) : 0;
-    d1ProgressText.textContent = `${d1Percent}%`;
-    d1BarFill.style.width = `${d1Percent}%`;
+    // M1
+    const m1Percent = modCounts.m1.total > 0 ? Math.round((modCounts.m1.completed / modCounts.m1.total) * 100) : 0;
+    m1ProgressText.textContent = `${m1Percent}%`;
+    m1BarFill.style.width = `${m1Percent}%`;
     
-    // D2
-    const d2Percent = domCounts.d2.total > 0 ? Math.round((domCounts.d2.completed / domCounts.d2.total) * 100) : 0;
-    d2ProgressText.textContent = `${d2Percent}%`;
-    d2BarFill.style.width = `${d2Percent}%`;
+    // M2
+    const m2Percent = modCounts.m2.total > 0 ? Math.round((modCounts.m2.completed / modCounts.m2.total) * 100) : 0;
+    m2ProgressText.textContent = `${m2Percent}%`;
+    m2BarFill.style.width = `${m2Percent}%`;
     
-    // D3
-    const d3Percent = domCounts.d3.total > 0 ? Math.round((domCounts.d3.completed / domCounts.d3.total) * 100) : 0;
-    d3ProgressText.textContent = `${d3Percent}%`;
-    d3BarFill.style.width = `${d3Percent}%`;
+    // M3
+    const m3Percent = modCounts.m3.total > 0 ? Math.round((modCounts.m3.completed / modCounts.m3.total) * 100) : 0;
+    m3ProgressText.textContent = `${m3Percent}%`;
+    m3BarFill.style.width = `${m3Percent}%`;
     
-    // D4
-    const d4Percent = domCounts.d4.total > 0 ? Math.round((domCounts.d4.completed / domCounts.d4.total) * 100) : 0;
-    d4ProgressText.textContent = `${d4Percent}%`;
-    d4BarFill.style.width = `${d4Percent}%`;
+    // M4
+    const m4Percent = modCounts.m4.total > 0 ? Math.round((modCounts.m4.completed / modCounts.m4.total) * 100) : 0;
+    m4ProgressText.textContent = `${m4Percent}%`;
+    m4BarFill.style.width = `${m4Percent}%`;
+
+    // M5
+    const m5Percent = modCounts.m5.total > 0 ? Math.round((modCounts.m5.completed / modCounts.m5.total) * 100) : 0;
+    m5ProgressText.textContent = `${m5Percent}%`;
+    m5BarFill.style.width = `${m5Percent}%`;
+
+    // M6
+    const m6Percent = modCounts.m6.total > 0 ? Math.round((modCounts.m6.completed / modCounts.m6.total) * 100) : 0;
+    m6ProgressText.textContent = `${m6Percent}%`;
+    m6BarFill.style.width = `${m6Percent}%`;
     
     // Activity Log stats
     statQuizMastered.textContent = `${qsCompleted} / ${totalQs}`;
