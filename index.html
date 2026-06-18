@@ -514,20 +514,20 @@
         <!-- Leaderboard Dashboard -->
         <div class="leaderboard-section">
           
-          <!-- Section 1: Global Cloud Leaderboards -->
           <h2 class="leaderboard-section-title" style="font-size: 1.15rem; color: var(--accent-cyan); margin: 25px 0 10px 0; display: flex; align-items: center; gap: 8px;">
-            <span>🌐</span> Global Leaderboards (Cloud Sync)
+            <span>🏆</span> Unified Leaderboards
           </h2>
           <div class="leaderboard-row" style="margin-bottom: 25px;">
-            <!-- Global Study Leaderboard -->
+            <!-- Unified Study Leaderboard -->
             <div class="leaderboard-card">
-              <h3>🏆 SecAI+ Global Leaderboard</h3>
-              <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">Combined student progress synced across all study portals.</p>
+              <h3>📚 SecAI+ Leaderboard</h3>
+              <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">Ranked student progress (Local and Cloud-synced).</p>
               <div class="table-container" style="overflow-x: auto;">
                 <table class="leaderboard-table">
                   <thead>
                     <tr>
                       <th style="width: 60px;">Rank</th>
+                      <th style="width: 80px;">Source</th>
                       <th>User Profile</th>
                       <th>Mastered</th>
                       <th>Quiz Qs</th>
@@ -535,21 +535,22 @@
                     </tr>
                   </thead>
                   <tbody id="global-leaderboard-body">
-                    <tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 20px;">Syncing with cloud...</td></tr>
+                    <tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 20px;">Loading leaderboard...</td></tr>
                   </tbody>
                 </table>
               </div>
             </div>
             
-            <!-- Global Tetris Leaderboard -->
+            <!-- Unified Tetris Leaderboard -->
             <div id="global-tetris-leaderboard-card" class="leaderboard-card tetris-board">
-              <h3>👾 Cyber-Tetris Global High Scores</h3>
-              <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">All-time top arcade scores across all study portals.</p>
+              <h3>👾 Cyber-Tetris High Scores</h3>
+              <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">All-time top arcade scores (Local and Cloud-synced).</p>
               <div class="table-container" style="overflow-x: auto;">
                 <table class="leaderboard-table tetris-table">
                   <thead>
                     <tr>
                       <th style="width: 60px;">Rank</th>
+                      <th style="width: 80px;">Source</th>
                       <th>Player</th>
                       <th>Score</th>
                       <th>Lines</th>
@@ -557,57 +558,7 @@
                     </tr>
                   </thead>
                   <tbody id="global-tetris-leaderboard-body">
-                    <tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 20px;">Syncing with cloud...</td></tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-
-          <!-- Section 2: Local Device Leaderboards -->
-          <h2 class="leaderboard-section-title" style="font-size: 1.15rem; color: var(--accent-cyan); margin: 25px 0 10px 0; display: flex; align-items: center; gap: 8px;">
-            <span>💻</span> Local Leaderboards (This Device)
-          </h2>
-          <div class="leaderboard-row">
-            <!-- Study Leaderboard -->
-            <div class="leaderboard-card">
-              <h3>🏆 SecAI+ Local Leaderboard</h3>
-              <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">Ranked by overall course completion percentage and quiz performance.</p>
-              <div class="table-container" style="overflow-x: auto;">
-                <table class="leaderboard-table">
-                  <thead>
-                    <tr>
-                      <th style="width: 60px;">Rank</th>
-                      <th>User Profile</th>
-                      <th>Mastered</th>
-                      <th>Quiz Qs</th>
-                      <th>Avg Accuracy</th>
-                    </tr>
-                  </thead>
-                  <tbody id="leaderboard-body">
-                    <!-- Populated via JS -->
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            
-            <!-- Secret Tetris Leaderboard -->
-            <div id="tetris-leaderboard-card" class="leaderboard-card tetris-board hidden">
-              <h3>👾 Cyber-Tetris Local High Scores</h3>
-              <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">Top arcade scores recorded on this portal.</p>
-              <div class="table-container" style="overflow-x: auto;">
-                <table class="leaderboard-table tetris-table">
-                  <thead>
-                    <tr>
-                      <th style="width: 60px;">Rank</th>
-                      <th>Player</th>
-                      <th>Score</th>
-                      <th>Lines</th>
-                      <th>Date</th>
-                    </tr>
-                  </thead>
-                  <tbody id="tetris-leaderboard-body">
-                    <!-- Populated via JS -->
+                    <tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 20px;">Loading high scores...</td></tr>
                   </tbody>
                 </table>
               </div>

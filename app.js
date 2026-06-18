@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
   async function syncStudyStatsToCloud() {
     if (!supabase) {
       console.warn("Supabase not configured, skipping cloud sync.");
-      renderGlobalStudyLeaderboard([]);
+      await loadGlobalStudyLeaderboard();
       return;
     }
 
@@ -173,41 +173,111 @@ document.addEventListener('DOMContentLoaded', () => {
       await loadGlobalStudyLeaderboard();
     } catch (e) {
       console.error("[Supabase DB] Failed to sync study stats:", e);
+      await loadGlobalStudyLeaderboard();
+    }
+  }
+
+  async function syncLocalStudyStatsToCloud() {
+    if (!supabase) return;
+    try {
+      const store = JSON.parse(localStorage.getItem('sec_ai_profiles_data')) || { profiles: {} };
+      const profileNames = Object.keys(store.profiles);
+      if (profileNames.length === 0) return;
+
+      for (const name of profileNames) {
+        const p = store.profiles[name];
+        const mastered = p.masteredTerms ? p.masteredTerms.length : 0;
+        const completed = p.completedQuestions ? p.completedQuestions.length : 0;
+        const accuracy = p.vocabAttempts > 0 ? Math.round((p.vocabCorrect / p.vocabAttempts) * 100) : 0;
+
+        await supabase
+          .from('secai_study_leaderboard')
+          .upsert({
+            client_id: clientId,
+            profile_name: name,
+            mastered: mastered,
+            completed: completed,
+            accuracy: accuracy,
+            updated_at: new Date().toISOString()
+          }, { onConflict: 'client_id,profile_name' });
+      }
+    } catch (e) {
+      console.error("[Supabase DB] Failed to sync all local study profiles to cloud:", e);
     }
   }
 
   async function loadGlobalStudyLeaderboard() {
-    if (!supabase) return;
-    try {
-      const { data, error } = await supabase
-        .from('secai_study_leaderboard')
-        .select('*')
-        .order('completed', { ascending: false })
-        .limit(100);
+    let cloudData = [];
+    if (supabase) {
+      try {
+        const { data, error } = await supabase
+          .from('secai_study_leaderboard')
+          .select('*')
+          .order('completed', { ascending: false })
+          .limit(100);
 
-      if (error) throw error;
-      
-      const list = (data || []).map(item => ({
+        if (error) throw error;
+        cloudData = data || [];
+      } catch (e) {
+        console.error("[Supabase DB] Failed to load study leaderboard from cloud:", e);
+      }
+    }
+
+    const mergedMap = new Map();
+
+    // 1. Add cloud profiles first
+    cloudData.forEach(item => {
+      const key = `${item.client_id}|${item.profile_name}`;
+      mergedMap.set(key, {
         clientId: item.client_id,
         profileName: item.profile_name,
         mastered: item.mastered,
         completed: item.completed,
         accuracy: item.accuracy,
-        updatedAt: new Date(item.updated_at).getTime()
-      }));
-
-      // Sort by total completed items descending, then accuracy descending
-      list.sort((a, b) => {
-        const totalA = (a.mastered || 0) + (a.completed || 0);
-        const totalB = (b.mastered || 0) + (b.completed || 0);
-        if (totalB !== totalA) return totalB - totalA;
-        return (b.accuracy || 0) - (a.accuracy || 0);
+        source: 'CLOUD'
       });
+    });
 
-      renderGlobalStudyLeaderboard(list);
+    // 2. Merge local profiles
+    try {
+      const store = JSON.parse(localStorage.getItem('sec_ai_profiles_data')) || { profiles: {} };
+      Object.keys(store.profiles).forEach(name => {
+        const p = store.profiles[name];
+        const mastered = p.masteredTerms ? p.masteredTerms.length : 0;
+        const completed = p.completedQuestions ? p.completedQuestions.length : 0;
+        const accuracy = p.vocabAttempts > 0 ? Math.round((p.vocabCorrect / p.vocabAttempts) * 100) : 0;
+
+        const key = `${clientId}|${name}`;
+        if (mergedMap.has(key)) {
+          const existing = mergedMap.get(key);
+          existing.mastered = Math.max(existing.mastered, mastered);
+          existing.completed = Math.max(existing.completed, completed);
+          existing.accuracy = Math.max(existing.accuracy, accuracy);
+        } else {
+          mergedMap.set(key, {
+            clientId: clientId,
+            profileName: name,
+            mastered: mastered,
+            completed: completed,
+            accuracy: accuracy,
+            source: 'LOCAL'
+          });
+        }
+      });
     } catch (e) {
-      console.error("[Supabase DB] Failed to load study leaderboard:", e);
+      console.error("Failed to parse local study profiles:", e);
     }
+
+    const list = Array.from(mergedMap.values());
+
+    list.sort((a, b) => {
+      const totalA = (a.mastered || 0) + (a.completed || 0);
+      const totalB = (b.mastered || 0) + (b.completed || 0);
+      if (totalB !== totalA) return totalB - totalA;
+      return (b.accuracy || 0) - (a.accuracy || 0);
+    });
+
+    renderGlobalStudyLeaderboard(list);
   }
 
   function renderGlobalStudyLeaderboard(list) {
@@ -216,7 +286,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     globalBody.innerHTML = '';
     if (!list || list.length === 0) {
-      globalBody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 15px;">No global scores found. Be the first!</td></tr>`;
+      globalBody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 15px;">No leaderboard scores found. Be the first!</td></tr>`;
       return;
     }
 
@@ -238,8 +308,13 @@ document.addEventListener('DOMContentLoaded', () => {
       
       const isYou = (p.clientId === clientId && p.profileName === state.activeProfile) ? ' <span style="color: var(--accent-cyan); font-size: 0.75rem;">(You)</span>' : '';
 
+      const sourceBadge = p.source === 'CLOUD'
+        ? `<span class="badge-cloud">CLOUD</span>`
+        : `<span class="badge-local">LOCAL</span>`;
+
       tr.innerHTML = `
         <td>${rankHtml}</td>
+        <td>${sourceBadge}</td>
         <td>${escapeHtml(p.profileName)}${isYou}</td>
         <td>${p.mastered} / ${totalTerms}</td>
         <td>${p.completed} / ${totalQs}</td>
@@ -274,30 +349,114 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  async function loadGlobalTetrisLeaderboard() {
+  async function syncLocalTetrisScoresToCloud() {
     if (!supabase) return;
     try {
-      const { data, error } = await supabase
+      const localScores = JSON.parse(localStorage.getItem('sec_ai_tetris_scores')) || [];
+      if (localScores.length === 0) return;
+
+      const { data: cloudScores, error } = await supabase
         .from('secai_tetris_leaderboard')
         .select('*')
-        .order('score', { ascending: false })
-        .limit(20);
+        .eq('client_id', clientId);
 
       if (error) throw error;
 
-      const list = (data || []).map(item => ({
+      const missingScores = localScores.filter(local => {
+        return !cloudScores.some(cloud => 
+          cloud.name === local.name && 
+          parseInt(cloud.score) === parseInt(local.score) && 
+          parseInt(cloud.lines) === parseInt(local.lines)
+        );
+      });
+
+      if (missingScores.length === 0) return;
+
+      console.log(`[Supabase DB] Syncing ${missingScores.length} local Tetris scores to cloud...`);
+
+      for (const s of missingScores) {
+        const dateObj = s.date ? new Date(s.date) : new Date();
+        const isoDate = isNaN(dateObj.getTime()) ? new Date().toISOString() : dateObj.toISOString();
+        
+        await supabase
+          .from('secai_tetris_leaderboard')
+          .insert({
+            client_id: clientId,
+            name: s.name,
+            score: parseInt(s.score),
+            lines: parseInt(s.lines),
+            created_at: isoDate
+          });
+      }
+
+      await loadGlobalTetrisLeaderboard();
+    } catch (e) {
+      console.error("[Supabase DB] Failed to sync local Tetris scores to cloud:", e);
+    }
+  }
+
+  async function loadGlobalTetrisLeaderboard() {
+    let cloudData = [];
+    if (supabase) {
+      try {
+        const { data, error } = await supabase
+          .from('secai_tetris_leaderboard')
+          .select('*')
+          .order('score', { ascending: false })
+          .limit(100);
+
+        if (error) throw error;
+        cloudData = data || [];
+      } catch (e) {
+        console.error("[Supabase DB] Failed to load Tetris leaderboard from cloud:", e);
+      }
+    }
+
+    const mergedScores = [];
+
+    cloudData.forEach(item => {
+      mergedScores.push({
         clientId: item.client_id,
         name: item.name,
-        score: item.score,
-        lines: item.lines,
+        score: parseInt(item.score),
+        lines: parseInt(item.lines),
         date: new Date(item.created_at).toLocaleDateString(),
-        updatedAt: new Date(item.created_at).getTime()
-      }));
+        source: 'CLOUD'
+      });
+    });
 
-      renderGlobalTetrisLeaderboard(list);
+    try {
+      const localScores = JSON.parse(localStorage.getItem('sec_ai_tetris_scores')) || [];
+      localScores.forEach(local => {
+        const alreadySynced = cloudData.some(cloud => 
+          cloud.client_id === clientId &&
+          cloud.name === local.name &&
+          parseInt(cloud.score) === parseInt(local.score) &&
+          parseInt(cloud.lines) === parseInt(local.lines)
+        );
+
+        if (!alreadySynced) {
+          mergedScores.push({
+            clientId: clientId,
+            name: local.name,
+            score: parseInt(local.score),
+            lines: parseInt(local.lines),
+            date: local.date || new Date().toLocaleDateString(),
+            source: 'LOCAL'
+          });
+        }
+      });
     } catch (e) {
-      console.error("[Supabase DB] Failed to load Tetris leaderboard:", e);
+      console.error("Failed to parse local Tetris scores:", e);
     }
+
+    mergedScores.sort((a, b) => {
+      if (b.score !== a.score) return b.score - a.score;
+      return b.lines - a.lines;
+    });
+
+    const topScores = mergedScores.slice(0, 50);
+    renderGlobalTetrisLeaderboard(topScores);
   }
 
   function renderGlobalTetrisLeaderboard(list) {
@@ -306,7 +465,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     globalTetrisBody.innerHTML = '';
     if (!list || list.length === 0) {
-      globalTetrisBody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: var(--text-muted); padding: 15px;">No high scores yet. Play Tetris to post!</td></tr>`;
+      globalTetrisBody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 15px;">No high scores yet. Play Tetris to post!</td></tr>`;
       return;
     }
 
@@ -323,9 +482,16 @@ document.addEventListener('DOMContentLoaded', () => {
       else if (index === 2) rankHtml = '<span class="rank-badge rank-3">3</span>';
       else rankHtml = `<span class="rank-badge rank-other">${index + 1}</span>`;
       
+      const sourceBadge = s.source === 'CLOUD'
+        ? `<span class="badge-cloud">CLOUD</span>`
+        : `<span class="badge-local">LOCAL</span>`;
+
+      const isYou = (s.clientId === clientId && s.name === state.activeProfile) ? ' <span style="color: var(--accent-cyan); font-size: 0.75rem;">(You)</span>' : '';
+
       tr.innerHTML = `
         <td>${rankHtml}</td>
-        <td style="color: ${index === 0 ? 'var(--primary-neon)' : '#fff'};">${escapeHtml(s.name)}</td>
+        <td>${sourceBadge}</td>
+        <td style="color: ${index === 0 ? 'var(--primary-neon)' : '#fff'};">${escapeHtml(s.name)}${isYou}</td>
         <td>${parseInt(s.score).toLocaleString()}</td>
         <td>${s.lines}</td>
         <td style="color: var(--text-muted); font-size: 0.8rem;">${s.date || ''}</td>
@@ -335,11 +501,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   async function loadGlobalLeaderboards() {
-    if (!supabase) {
-      renderGlobalStudyLeaderboard([]);
-      renderGlobalTetrisLeaderboard([]);
-      return;
-    }
     await Promise.all([
       loadGlobalStudyLeaderboard(),
       loadGlobalTetrisLeaderboard()
@@ -401,8 +562,13 @@ document.addEventListener('DOMContentLoaded', () => {
         renderGlossary();
       } else if (targetTab === 'progress') {
         renderProgress();
-        syncStudyStatsToCloud();
-        loadGlobalTetrisLeaderboard();
+        if (supabase) {
+          syncStudyStatsToCloud();
+          syncLocalTetrisScoresToCloud();
+        } else {
+          loadGlobalStudyLeaderboard();
+          loadGlobalTetrisLeaderboard();
+        }
       } else if (targetTab === 'tutor') {
         loadTutorTab();
       }
@@ -1558,90 +1724,7 @@ document.addEventListener('DOMContentLoaded', () => {
       : 0;
     statVocabAccuracy.textContent = `${vocabAccuracyVal}%`;
 
-    // Render Study Leaderboard
-    const leaderboardBody = document.getElementById('leaderboard-body');
-    if (leaderboardBody) {
-      leaderboardBody.innerHTML = '';
-      const store = JSON.parse(localStorage.getItem('sec_ai_profiles_data')) || { profiles: {} };
-      
-      const rankedProfiles = [];
-      Object.keys(store.profiles).forEach(name => {
-        const p = store.profiles[name];
-        const mastered = p.masteredTerms ? p.masteredTerms.length : 0;
-        const completed = p.completedQuestions ? p.completedQuestions.length : 0;
-        const accuracy = p.vocabAttempts > 0 ? Math.round((p.vocabCorrect / p.vocabAttempts) * 100) : 0;
-        
-        rankedProfiles.push({
-          name: name,
-          mastered: mastered,
-          completed: completed,
-          total: mastered + completed,
-          accuracy: accuracy
-        });
-      });
-      
-      // Sort profiles: total completed items first, then vocab accuracy
-      rankedProfiles.sort((a, b) => {
-        if (b.total !== a.total) {
-          return b.total - a.total;
-        }
-        return b.accuracy - a.accuracy;
-      });
-      
-      rankedProfiles.forEach((p, index) => {
-        const tr = document.createElement('tr');
-        if (p.name === state.activeProfile) {
-          tr.style.background = 'rgba(6, 182, 212, 0.08)';
-          tr.style.fontWeight = '600';
-        }
-        
-        let rankHtml = '';
-        if (index === 0) rankHtml = '<span class="rank-badge rank-1">1</span>';
-        else if (index === 1) rankHtml = '<span class="rank-badge rank-2">2</span>';
-        else if (index === 2) rankHtml = '<span class="rank-badge rank-3">3</span>';
-        else rankHtml = `<span class="rank-badge rank-other">${index + 1}</span>`;
-        
-        tr.innerHTML = `
-          <td>${rankHtml}</td>
-          <td>${p.name} ${p.name === state.activeProfile ? '<span style="color: var(--accent-cyan); font-size: 0.75rem;">(You)</span>' : ''}</td>
-          <td>${p.mastered} / ${totalTerms}</td>
-          <td>${p.completed} / ${totalQs}</td>
-          <td>${p.accuracy}%</td>
-        `;
-        leaderboardBody.appendChild(tr);
-      });
-    }
-
-    // Render Secret Tetris Leaderboard
-    const tetrisLeaderboardCard = document.getElementById('tetris-leaderboard-card');
-    const tetrisLeaderboardBody = document.getElementById('tetris-leaderboard-body');
-    if (tetrisLeaderboardCard && tetrisLeaderboardBody) {
-      const tetrisScores = JSON.parse(localStorage.getItem('sec_ai_tetris_scores')) || [];
-      if (tetrisScores.length === 0) {
-        tetrisLeaderboardCard.classList.add('hidden');
-      } else {
-        tetrisLeaderboardCard.classList.remove('hidden');
-        tetrisLeaderboardBody.innerHTML = '';
-        
-        tetrisScores.forEach((s, index) => {
-          const tr = document.createElement('tr');
-          let rankHtml = '';
-          if (index === 0) rankHtml = '<span class="rank-badge rank-1">1</span>';
-          else if (index === 1) rankHtml = '<span class="rank-badge rank-2">2</span>';
-          else if (index === 2) rankHtml = '<span class="rank-badge rank-3">3</span>';
-          else rankHtml = `<span class="rank-badge rank-other">${index + 1}</span>`;
-          
-          tr.innerHTML = `
-            <td>${rankHtml}</td>
-            <td style="color: ${index === 0 ? 'var(--primary-neon)' : '#fff'};">${s.name}</td>
-            <td>${parseInt(s.score).toLocaleString()}</td>
-            <td>${s.lines}</td>
-            <td style="color: var(--text-muted); font-size: 0.8rem;">${s.date || ''}</td>
-          `;
-          tetrisLeaderboardBody.appendChild(tr);
-        });
-      }
-    }
+    // Unified leaderboards are rendered via loadGlobalLeaderboards()
   }
 
   resetProgressBtn.addEventListener('click', () => {
@@ -2631,6 +2714,10 @@ Answer queries politely and concisely. If the user asks for a practice question,
   // ==========================================================================
   
   initQuiz();
+  if (supabase) {
+    syncLocalStudyStatsToCloud();
+    syncLocalTetrisScoresToCloud();
+  }
   loadGlobalLeaderboards();
 
   window.addEventListener('tetris-score-updated', (e) => {
