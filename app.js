@@ -116,12 +116,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // ==========================================================================
-  // Global Cloud Leaderboards (ExtendsClass JSON Storage)
+  // Global Cloud Leaderboards (Supabase Integration)
   // ==========================================================================
-  const GLOBAL_DB = {
-    studyUrl: 'https://extendsclass.com/api/json-storage/bin/ddfaddd',
-    tetrisUrl: 'https://extendsclass.com/api/json-storage/bin/bbddedd'
-  };
+  const isSupabaseConfigured = typeof SUPABASE_URL !== 'undefined' && 
+                               typeof SUPABASE_ANON_KEY !== 'undefined' && 
+                               SUPABASE_URL && 
+                               SUPABASE_ANON_KEY && 
+                               SUPABASE_URL !== 'https://your-project-id.supabase.co' && 
+                               SUPABASE_ANON_KEY !== 'YOUR_ANON_KEY_HERE' &&
+                               SUPABASE_ANON_KEY !== 'PASTE_YOUR_ANON_KEY_HERE';
+
+  let supabase = null;
+  if (isSupabaseConfigured && window.supabase) {
+    try {
+      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    } catch (err) {
+      console.error("Failed to initialize Supabase client:", err);
+    }
+  } else {
+    console.warn("Supabase is not configured or client library is missing. Operating in offline/local mode.");
+  }
 
   let clientId = localStorage.getItem('sec_ai_client_id');
   if (!clientId) {
@@ -129,163 +143,71 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem('sec_ai_client_id', clientId);
   }
 
-  const DB_CRYPT_KEY = "secai_portal_shared_secret_2026";
-
-  function encryptData(text, key) {
-    let result = '';
-    for (let i = 0; i < text.length; i++) {
-      const charCode = text.charCodeAt(i) ^ key.charCodeAt(i % key.length);
-      result += String.fromCharCode(charCode);
-    }
-    return btoa(unescape(encodeURIComponent(result)));
-  }
-
-  function decryptData(base64Text, key) {
-    if (!base64Text || typeof base64Text !== 'string') return null;
-    try {
-      const text = decodeURIComponent(escape(atob(base64Text)));
-      let result = '';
-      for (let i = 0; i < text.length; i++) {
-        const charCode = text.charCodeAt(i) ^ key.charCodeAt(i % key.length);
-        result += String.fromCharCode(charCode);
-      }
-      return result;
-    } catch (e) {
-      console.error("[Crypto] Decryption failed:", e);
-      return null;
-    }
-  }
-
-  async function fetchCloudData(url) {
-    try {
-      const res = await fetch(url, {
-        headers: {
-          'User-Agent': 'Mozilla/5.0'
-        }
-      });
-      if (!res.ok) throw new Error(`Status ${res.status}`);
-      const resJson = await res.json();
-      if (!resJson || typeof resJson !== 'object' || !resJson.payload) {
-        return [];
-      }
-      const decrypted = decryptData(resJson.payload, DB_CRYPT_KEY);
-      if (!decrypted) return [];
-      return JSON.parse(decrypted);
-    } catch (e) {
-      console.error("[Cloud DB] Failed to fetch data:", e);
-      return null;
-    }
-  }
-
-  async function updateCloudData(url, data) {
-    try {
-      const payloadStr = JSON.stringify(data);
-      const encrypted = encryptData(payloadStr, DB_CRYPT_KEY);
-      const wrapped = { payload: encrypted };
-
-      const res = await fetch(url, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'User-Agent': 'Mozilla/5.0'
-        },
-        body: JSON.stringify(wrapped)
-      });
-      if (!res.ok) throw new Error(`Status ${res.status}`);
-      return await res.json();
-    } catch (e) {
-      console.error("[Cloud DB] Failed to update data:", e);
-      return null;
-    }
-  }
-
-  function sanitizeStudyLeaderboard(data) {
-    if (!Array.isArray(data)) return [];
-    return data
-      .map(item => {
-        if (!item || typeof item !== 'object') return null;
-        const cleaned = {
-          clientId: typeof item.clientId === 'string' ? item.clientId.substring(0, 50) : '',
-          profileName: typeof item.profileName === 'string' ? item.profileName.substring(0, 25) : 'Unknown',
-          mastered: typeof item.mastered === 'number' && !isNaN(item.mastered) ? Math.max(0, item.mastered) : 0,
-          completed: typeof item.completed === 'number' && !isNaN(item.completed) ? Math.max(0, item.completed) : 0,
-          accuracy: typeof item.accuracy === 'number' && !isNaN(item.accuracy) ? Math.max(0, Math.min(100, item.accuracy)) : 0,
-          updatedAt: typeof item.updatedAt === 'number' && !isNaN(item.updatedAt) ? item.updatedAt : Date.now()
-        };
-        cleaned.clientId = escapeHtml(cleaned.clientId);
-        cleaned.profileName = escapeHtml(cleaned.profileName);
-        return cleaned;
-      })
-      .filter(item => item !== null);
-  }
-
-  function sanitizeTetrisLeaderboard(data) {
-    if (!Array.isArray(data)) return [];
-    return data
-      .map(item => {
-        if (!item || typeof item !== 'object') return null;
-        const cleaned = {
-          clientId: typeof item.clientId === 'string' ? item.clientId.substring(0, 50) : '',
-          name: typeof item.name === 'string' ? item.name.substring(0, 25) : 'Unknown',
-          score: typeof item.score === 'number' && !isNaN(item.score) ? Math.max(0, item.score) : 0,
-          lines: typeof item.lines === 'number' && !isNaN(item.lines) ? Math.max(0, item.lines) : 0,
-          date: typeof item.date === 'string' ? item.date.substring(0, 15) : '',
-          updatedAt: typeof item.updatedAt === 'number' && !isNaN(item.updatedAt) ? item.updatedAt : Date.now()
-        };
-        cleaned.clientId = escapeHtml(cleaned.clientId);
-        cleaned.name = escapeHtml(cleaned.name);
-        cleaned.date = escapeHtml(cleaned.date);
-        return cleaned;
-      })
-      .filter(item => item !== null);
-  }
-
   async function syncStudyStatsToCloud() {
-    const totalTerms = glossary ? glossary.length : 172;
-    const totalQs = questions ? questions.length : 203;
-    
+    if (!supabase) {
+      console.warn("Supabase not configured, skipping cloud sync.");
+      renderGlobalStudyLeaderboard([]);
+      return;
+    }
+
     const mastered = state.masteredTerms ? state.masteredTerms.length : 0;
     const completed = state.completedQuestions ? state.completedQuestions.length : 0;
     const accuracy = state.vocab.score.attempts > 0 
       ? Math.round((state.vocab.score.correct / state.vocab.score.attempts) * 100)
       : 0;
 
-    const payload = {
-      clientId: clientId,
-      profileName: state.activeProfile,
-      mastered: mastered,
-      completed: completed,
-      accuracy: accuracy,
-      updatedAt: Date.now()
-    };
+    try {
+      const { error } = await supabase
+        .from('secai_study_leaderboard')
+        .upsert({
+          client_id: clientId,
+          profile_name: state.activeProfile,
+          mastered: mastered,
+          completed: completed,
+          accuracy: accuracy,
+          updated_at: new Date().toISOString()
+        }, { onConflict: 'client_id,profile_name' });
 
-    let list = await fetchCloudData(GLOBAL_DB.studyUrl);
-    list = sanitizeStudyLeaderboard(list);
+      if (error) throw error;
 
-    // Merge or insert
-    const idx = list.findIndex(item => item.clientId === clientId && item.profileName === state.activeProfile);
-    if (idx >= 0) {
-      list[idx] = payload;
-    } else {
-      list.push(payload);
+      await loadGlobalStudyLeaderboard();
+    } catch (e) {
+      console.error("[Supabase DB] Failed to sync study stats:", e);
     }
+  }
 
-    // Sort by total completed items descending, then accuracy descending
-    list.sort((a, b) => {
-      const totalA = (a.mastered || 0) + (a.completed || 0);
-      const totalB = (b.mastered || 0) + (b.completed || 0);
-      if (totalB !== totalA) return totalB - totalA;
-      return (b.accuracy || 0) - (a.accuracy || 0);
-    });
+  async function loadGlobalStudyLeaderboard() {
+    if (!supabase) return;
+    try {
+      const { data, error } = await supabase
+        .from('secai_study_leaderboard')
+        .select('*')
+        .order('completed', { ascending: false })
+        .limit(100);
 
-    // Limit to top 100
-    list = list.slice(0, 100);
+      if (error) throw error;
+      
+      const list = (data || []).map(item => ({
+        clientId: item.client_id,
+        profileName: item.profile_name,
+        mastered: item.mastered,
+        completed: item.completed,
+        accuracy: item.accuracy,
+        updatedAt: new Date(item.updated_at).getTime()
+      }));
 
-    // Save back to cloud
-    await updateCloudData(GLOBAL_DB.studyUrl, list);
+      // Sort by total completed items descending, then accuracy descending
+      list.sort((a, b) => {
+        const totalA = (a.mastered || 0) + (a.completed || 0);
+        const totalB = (b.mastered || 0) + (b.completed || 0);
+        if (totalB !== totalA) return totalB - totalA;
+        return (b.accuracy || 0) - (a.accuracy || 0);
+      });
 
-    // Refresh UI
-    renderGlobalStudyLeaderboard(list);
+      renderGlobalStudyLeaderboard(list);
+    } catch (e) {
+      console.error("[Supabase DB] Failed to load study leaderboard:", e);
+    }
   }
 
   function renderGlobalStudyLeaderboard(list) {
@@ -328,32 +250,54 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   async function syncTetrisScoreToCloud(playerName, score, lines) {
-    const payload = {
-      clientId: clientId,
-      name: playerName,
-      score: score,
-      lines: lines,
-      date: new Date().toLocaleDateString(),
-      updatedAt: Date.now()
-    };
+    if (!supabase) {
+      console.warn("Supabase not configured, skipping Tetris cloud sync.");
+      return;
+    }
 
-    let list = await fetchCloudData(GLOBAL_DB.tetrisUrl);
-    list = sanitizeTetrisLeaderboard(list);
+    try {
+      const { error } = await supabase
+        .from('secai_tetris_leaderboard')
+        .insert({
+          client_id: clientId,
+          name: playerName,
+          score: score,
+          lines: lines,
+          created_at: new Date().toISOString()
+        });
 
-    // Add new score
-    list.push(payload);
+      if (error) throw error;
 
-    // Sort descending by score
-    list.sort((a, b) => b.score - a.score);
+      await loadGlobalTetrisLeaderboard();
+    } catch (e) {
+      console.error("[Supabase DB] Failed to sync Tetris score:", e);
+    }
+  }
 
-    // Keep top 20 global scores
-    list = list.slice(0, 20);
+  async function loadGlobalTetrisLeaderboard() {
+    if (!supabase) return;
+    try {
+      const { data, error } = await supabase
+        .from('secai_tetris_leaderboard')
+        .select('*')
+        .order('score', { ascending: false })
+        .limit(20);
 
-    // Save back to cloud
-    await updateCloudData(GLOBAL_DB.tetrisUrl, list);
+      if (error) throw error;
 
-    // Refresh UI
-    renderGlobalTetrisLeaderboard(list);
+      const list = (data || []).map(item => ({
+        clientId: item.client_id,
+        name: item.name,
+        score: item.score,
+        lines: item.lines,
+        date: new Date(item.created_at).toLocaleDateString(),
+        updatedAt: new Date(item.created_at).getTime()
+      }));
+
+      renderGlobalTetrisLeaderboard(list);
+    } catch (e) {
+      console.error("[Supabase DB] Failed to load Tetris leaderboard:", e);
+    }
   }
 
   function renderGlobalTetrisLeaderboard(list) {
@@ -391,11 +335,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   async function loadGlobalLeaderboards() {
-    const studyList = sanitizeStudyLeaderboard(await fetchCloudData(GLOBAL_DB.studyUrl));
-    renderGlobalStudyLeaderboard(studyList);
-
-    const tetrisList = sanitizeTetrisLeaderboard(await fetchCloudData(GLOBAL_DB.tetrisUrl));
-    renderGlobalTetrisLeaderboard(tetrisList);
+    if (!supabase) {
+      renderGlobalStudyLeaderboard([]);
+      renderGlobalTetrisLeaderboard([]);
+      return;
+    }
+    await Promise.all([
+      loadGlobalStudyLeaderboard(),
+      loadGlobalTetrisLeaderboard()
+    ]);
   }
 
   function escapeHtml(text) {
@@ -454,7 +402,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } else if (targetTab === 'progress') {
         renderProgress();
         syncStudyStatsToCloud();
-        fetchCloudData(GLOBAL_DB.tetrisUrl).then(list => renderGlobalTetrisLeaderboard(list));
+        loadGlobalTetrisLeaderboard();
       } else if (targetTab === 'tutor') {
         loadTutorTab();
       }

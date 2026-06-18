@@ -17,3 +17,6 @@ node_modules/
 *.njsproj
 *.sln
 *.swp
+
+# App Configuration (contains API keys)
+config.js
