@@ -855,6 +855,41 @@
     </div>
   </div>
 
+  <!-- Update Notification Modal -->
+  <div id="update-modal" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 style="display: flex; align-items: center; gap: 8px; margin: 0;">
+          <span>🚀</span> Update Available!
+        </h3>
+        <button id="update-modal-close-btn" class="modal-close">&times;</button>
+      </div>
+      
+      <div class="modal-body">
+        <div style="background: rgba(6, 182, 212, 0.1); border: 1px solid rgba(6, 182, 212, 0.2); padding: 12px; border-radius: 8px; margin-bottom: 16px;">
+          <p style="margin: 0; font-size: 0.9rem; line-height: 1.45;">
+            A newer version of the <strong>SecAI+ Prep Portal</strong> is available on GitHub. 
+            Your current version is <strong id="local-version-display">v1.2.0</strong>, and the latest is <strong id="latest-version-display" style="color: var(--accent-cyan);">v1.2.0</strong>.
+          </p>
+        </div>
+        
+        <h4 style="margin: 0 0 8px 0; font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">What's New:</h4>
+        <div id="update-notes-container" style="background: rgba(0,0,0,0.25); border: 1px solid var(--border-color); padding: 12px; border-radius: 8px; font-size: 0.82rem; max-height: 150px; overflow-y: auto; white-space: pre-wrap; font-family: inherit; margin-bottom: 20px; line-height: 1.4; color: var(--text-muted);">
+          Loading updates...
+        </div>
+        
+        <div style="display: flex; gap: 12px;">
+          <a id="update-github-link" href="#" target="_blank" class="btn btn-primary" style="flex: 1; text-align: center; text-decoration: none; padding: 10px; display: inline-flex; align-items: center; justify-content: center; height: 38px; box-sizing: border-box;">
+            Get Update 📥
+          </a>
+          <button id="update-ignore-btn" class="btn btn-secondary" style="flex: 1; height: 38px; padding: 10px;">
+            Maybe Later
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Supabase CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <!-- App Configuration -->

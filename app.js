@@ -2753,6 +2753,108 @@ Answer queries politely and concisely. If the user asks for a practice question,
       syncTetrisScoreToCloud(e.detail.name, e.detail.score, e.detail.lines);
     }
   });
+
+  // ==========================================================================
+  // Version Check Utility (GitHub Releases Integration)
+  // ==========================================================================
+  const CURRENT_VERSION = "v1.2.0";
+
+  async function checkAppVersion() {
+    const cachedUpdate = localStorage.getItem('sec_ai_latest_update');
+    const lastCheck = localStorage.getItem('sec_ai_last_version_check');
+    const now = Date.now();
+    const CHECK_INTERVAL = 6 * 60 * 60 * 1000; // Check every 6 hours
+
+    // If we have a cached version and it's within the interval, use it
+    if (cachedUpdate && lastCheck && (now - parseInt(lastCheck, 10) < CHECK_INTERVAL)) {
+      try {
+        const updateData = JSON.parse(cachedUpdate);
+        if (updateData && updateData.tag_name !== CURRENT_VERSION) {
+          showUpdateModal(updateData);
+        }
+        return;
+      } catch (e) {
+        console.warn("Error parsing cached update data:", e);
+      }
+    }
+
+    // Otherwise, fetch fresh from GitHub API
+    try {
+      const response = await fetch("https://api.github.com/repos/darnokgg/secai/releases/latest", {
+        headers: { "Accept": "application/vnd.github.v3+json" }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`GitHub API returned status ${response.status}`);
+      }
+
+      const data = await response.json();
+      if (data && data.tag_name) {
+        // Cache the result and timestamp
+        localStorage.setItem('sec_ai_latest_update', JSON.stringify(data));
+        localStorage.setItem('sec_ai_last_version_check', now.toString());
+
+        if (data.tag_name !== CURRENT_VERSION) {
+          showUpdateModal(data);
+        }
+      }
+    } catch (err) {
+      console.warn("Could not check for latest version:", err.message);
+    }
+  }
+
+  function showUpdateModal(data) {
+    const updateModal = document.getElementById('update-modal');
+    const localVersionDisplay = document.getElementById('local-version-display');
+    const latestVersionDisplay = document.getElementById('latest-version-display');
+    const updateNotesContainer = document.getElementById('update-notes-container');
+    const updateGithubLink = document.getElementById('update-github-link');
+    
+    if (!updateModal) return;
+
+    if (localVersionDisplay) localVersionDisplay.textContent = CURRENT_VERSION;
+    if (latestVersionDisplay) latestVersionDisplay.textContent = data.tag_name;
+    
+    if (updateNotesContainer) {
+      // Basic formatting for release notes (sanitize and output as pre-wrap text)
+      updateNotesContainer.textContent = data.body || "No release details provided.";
+    }
+
+    if (updateGithubLink) {
+      updateGithubLink.href = data.html_url || "https://github.com/darnokgg/secai/releases";
+    }
+
+    // Show the modal
+    updateModal.classList.remove('hidden');
+  }
+
+  // Bind close buttons for update modal
+  const updateModal = document.getElementById('update-modal');
+  const updateCloseBtn = document.getElementById('update-modal-close-btn');
+  const updateIgnoreBtn = document.getElementById('update-ignore-btn');
+
+  if (updateCloseBtn) {
+    updateCloseBtn.addEventListener('click', () => {
+      if (updateModal) updateModal.classList.add('hidden');
+    });
+  }
+
+  if (updateIgnoreBtn) {
+    updateIgnoreBtn.addEventListener('click', () => {
+      if (updateModal) updateModal.classList.add('hidden');
+    });
+  }
+
+  if (updateModal) {
+    updateModal.addEventListener('click', (e) => {
+      if (e.target === updateModal) {
+        updateModal.classList.add('hidden');
+      }
+    });
+  }
+
+  // Trigger version check on load
+  checkAppVersion();
 });
 
 // =============================================================================
