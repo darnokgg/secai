@@ -2757,7 +2757,7 @@ Answer queries politely and concisely. If the user asks for a practice question,
   // ==========================================================================
   // Version Check Utility (GitHub Releases Integration)
   // ==========================================================================
-  const CURRENT_VERSION = "v1.2.0";
+  const CURRENT_VERSION = "v1.2.1";
 
   async function checkAppVersion() {
     const cachedUpdate = localStorage.getItem('sec_ai_latest_update');
