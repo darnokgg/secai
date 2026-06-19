@@ -840,6 +840,19 @@ document.addEventListener('DOMContentLoaded', () => {
     return newArray;
   }
 
+  // Shuffle options inside a question while maintaining correct index/letter
+  function shuffleQuestionOptions(question) {
+    const questionCopy = { ...question };
+    const indexedOptions = question.options.map((opt, idx) => ({ opt, originalIndex: idx }));
+    const shuffledIndexed = shuffle(indexedOptions);
+    
+    questionCopy.options = shuffledIndexed.map(item => item.opt);
+    questionCopy.correctIndex = shuffledIndexed.findIndex(item => item.originalIndex === question.correctIndex);
+    questionCopy.correctLetter = String.fromCharCode(65 + questionCopy.correctIndex);
+    
+    return questionCopy;
+  }
+
   // Smart domain sampling for weighted exam simulation
   function sampleWeightedQuestions(totalCount, includeAi) {
     // Target Counts matching official exam weights:
@@ -959,7 +972,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      state.quiz.activeQuestions = activeQs;
+      state.quiz.activeQuestions = activeQs.map(shuffleQuestionOptions);
       state.quiz.currentIndex = 0;
       state.quiz.correctCount = 0;
       state.quiz.hasAnswered = false;
@@ -1059,7 +1072,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function renderQuizQuestion() {
     if (state.quiz.activeQuestions.length === 0) {
-      state.quiz.activeQuestions = shuffle(questions);
+      state.quiz.activeQuestions = shuffle(questions).map(shuffleQuestionOptions);
     }
     
     const currentQ = state.quiz.activeQuestions[state.quiz.currentIndex];

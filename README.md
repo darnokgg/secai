@@ -24,15 +24,26 @@ Since this is a lightweight, pure client-side application, you can run it instan
   Simply double-click the `index.html` file in your file explorer to open the portal directly in your web browser. This is completely fine for normal study and usage.
 * **Option B: Run a Local Server (Optional)**
   If your web browser restricts API requests (like fetching CDN libraries, Supabase DB operations, or local assets) when loading files directly from the local filesystem via the `file://` protocol, you can serve the directory using a lightweight HTTP server:
-  * **Using Python:**
-    ```bash
+  * **Using Python (PowerShell / Terminal):**
+    ```powershell
+    # Ensure you are inside the cloned secai folder, then run:
     python -m http.server 8000
+    ```
+    Once running, you can open the page by navigating to `http://localhost:8000` in your browser, or launch it directly from PowerShell with:
+    ```powershell
+    Start-Process "http://localhost:8000"
     ```
   * **Using Node.js:**
     ```bash
     npx serve
     ```
-  Then navigate to `http://localhost:8000` (Python) or `http://localhost:3000` (Node) in your browser. 
+    Then navigate to `http://localhost:3000` in your browser.
+
+> [!TIP]
+> **Avoiding 404 Errors:** 
+> * The Python HTTP server serves files from the directory where you run the command. Make sure you run it inside the `secai` project folder.
+> * Always navigate to the root address `http://localhost:8000` (or `http://localhost:8000/index.html`). 
+> * Do not append `/SecAI` to the URL path (since the server already treats the project folder as the root), and do not append tab names like `/quiz` or `/vocab` to the URL directly (as they are virtual tabs managed dynamically by JavaScript inside `index.html` rather than physical files).
 
 * **Which should I choose?** Double-clicking `index.html` works perfectly for almost all users. Running a local server is only necessary if your browser console outputs strict security or CORS errors when attempting to load the database or tutor features.
 
